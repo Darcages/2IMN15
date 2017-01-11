@@ -1,3 +1,4 @@
+import iot.data.repository.UserAccountRepository;
 import iot.services.UserAccountService;
 
 import javax.ws.rs.ApplicationPath;
@@ -9,7 +10,7 @@ import java.util.Set;
  * Declares the root resource and provider classes.
  */
 @ApplicationPath("/services")
-public class Services extends Application{
+public class Services extends Application {
 
     /**
      * The method returns a non-empty collection with classes, that must be included in the published JAX-RS

@@ -1,6 +1,7 @@
 package iot.services;
 
 import iot.data.Database;
+import iot.data.repository.UserAccountRepository;
 import iot.domain.UserAccount;
 
 import javax.json.JsonArray;
@@ -17,11 +18,14 @@ import java.util.Optional;
 @Path("/UserAccountService")
 public class UserAccountService {
 
-    private ArrayList<UserAccount> tmp = new ArrayList<>();
+    private UserAccountRepository repos;
 
     public UserAccountService() {
-        this.tmp.add(UserAccount.Make(1, 3, "Test", Optional.of("prefix"), "Tester", "test@email.com", "password"));
-        this.tmp.add(UserAccount.Make(2, 7, "Bert", Optional.empty(), "Janssen", "bert@janssen.nl", "wachtwoord"));
+        try {
+            this.repos = new UserAccountRepository(Database.load());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @GET
@@ -29,11 +33,13 @@ public class UserAccountService {
     @Produces(MediaType.APPLICATION_JSON)
     public JsonObject getAll() {
         try {
-            JsonArray array = JsonConverter.toJsonArray(this.tmp, ua -> JsonConverter.toJson(ua));
+            ArrayList<UserAccount> accounts = this.repos.getAll();
+
+            JsonArray array = JsonConverter.toJsonArray(accounts, ua -> JsonConverter.toJson(ua));
             return JsonConverter.Success(array);
         }
         catch (Exception ex) {
-            // TODO: Some kind of logging?
+            ex.printStackTrace();
             return JsonConverter.ExceptionInternal();
         }
     }
@@ -46,29 +52,24 @@ public class UserAccountService {
         try {
             UserAccount ua = JsonConverter.toUserAccount(userAccount);
 
-            // TODO: Actually check existence.
-            for (UserAccount existing : this.tmp)
-            {
-                if (existing.getGroupNr() == ua.getGroupNr()) {
-                    throw new NotAllowedException(
-                        String.format(
-                            "There already exists an user account with the group number '%1s'.",
-                            ua.getGroupNr()));
-                }
+            if (this.repos.exists(ua.getGroupNr())) {
+                throw new IllegalArgumentException(
+                    String.format(
+                        "There already exists an user account with the group number '%1s'.",
+                        ua.getGroupNr()));
             }
 
-            // TODO: Actually create the user account.
-            this.tmp.add(ua);
+            this.repos.create(ua);
 
             return JsonConverter.Success(JsonConverter.toJson(ua));
         }
-        catch (IllegalArgumentException | NoSuchFieldException | NoSuchElementException | NotAllowedException ex)
+        catch (IllegalArgumentException | NoSuchFieldException | NoSuchElementException ex)
         {
             return JsonConverter.Exception(ex);
         }
         catch (Exception ex)
         {
-            // TODO: Some kind of logging?
+            ex.printStackTrace();
             return JsonConverter.ExceptionInternal();
         }
     }
@@ -78,10 +79,11 @@ public class UserAccountService {
     @Produces(MediaType.APPLICATION_JSON)
     public JsonObject delete(@QueryParam("groupNr") int groupNr) {
         try {
-            this.tmp.removeIf(ua -> ua.getGroupNr() == groupNr);
+            this.repos.delete(groupNr);
             return JsonConverter.Success();
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             return JsonConverter.ExceptionInternal();
         }
     }

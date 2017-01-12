@@ -11,6 +11,9 @@ public class Device {
     private boolean deviceType;
     private boolean state;
     private int roomNr;
+    private int locX;
+    private int locY;
+
 
     /**
      * Initializes a new instance of the UserAccount class.
@@ -31,6 +34,14 @@ public class Device {
         return this.roomNr;
     }
 
+    public int getLocX() {
+        return this.locX;
+    }
+
+    public int getLocY() {
+        return this.locY;
+    }
+
     /**
      * Creates a new instance of the UserAccount class.
      * @param deviceID The device id.
@@ -45,7 +56,9 @@ public class Device {
             int deviceID,
             boolean deviceType,
             boolean state,
-            int roomNr
+            int roomNr,
+            int locX,
+            int locY
     ) {
         Validation.deviceID(deviceID);
         Validation.roomNr(roomNr);
@@ -55,6 +68,8 @@ public class Device {
         d.deviceType = deviceType;
         d.state = state;
         d.roomNr = roomNr;
+        d.locX = locX;
+        d.locY = locY;
 
         return d;
     }

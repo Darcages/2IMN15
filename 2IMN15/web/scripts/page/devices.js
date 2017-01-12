@@ -14,7 +14,7 @@ var addDeviceToOverview = function(device) {
 
     var row = toTableRowRemovable(
         device.deviceID,
-        [device.deviceID, device.deviceTypeString(), device.stateString(), device.roomNr],
+        [device.deviceID, device.deviceTypeString(), device.stateString(), device.roomNr, device.locX, device.locY],
         remove);
 
     $('#devices-overview').append(row);
@@ -65,8 +65,26 @@ var create = function() {
         roomNr = parseInt(roomNr);
     }
 
+    var locX = document.getElementById('new-device-input-x').value;
+    if (!isInt(locX)) {
+        setErrorMessage("The X location is not an integer.");
+        return;
+    } else {
+        locX = parseInt(locX);
+    }
+
+    var locY = document.getElementById('new-device-input-y').value;
+    if (!isInt(locY)) {
+        setErrorMessage("The Y location is not an integer.");
+        return;
+    } else {
+        locY = parseInt(locY);
+    }
+
+
+
     services.device
-        .create(deviceID, deviceType, deviceState, roomNr)
+        .create(deviceID, deviceType, deviceState, roomNr, locX, locY)
         .done(function(device) {
             disableErrorMessage();
 

@@ -92,7 +92,7 @@ var services = {
          * @param roomNr The number of the room of the device.
          * @returns {Promise} The promise that will give the result of this call.
          */
-        create: function(deviceID, deviceType, state, roomNr) {
+        create: function(deviceID, deviceType, state, roomNr, locX, locY) {
             return api
                 .post(
                     services.device.url + "/create",
@@ -100,7 +100,9 @@ var services = {
                         deviceID: deviceID,
                         deviceType: deviceType,
                         state: state,
-                        roomNr: roomNr
+                        roomNr: roomNr,
+                        locX: locX,
+                        locY : locY
                     })
                 .then(function(data) {
                     return parseDevice(data);

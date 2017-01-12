@@ -174,8 +174,10 @@ public class JsonConverter {
         boolean type = JsonConverter.getBoolean(device, "deviceType");
         boolean state = JsonConverter.getBoolean(device, "state");
         int roomNr = JsonConverter.getInt(device, "roomNr");
+        int locX = JsonConverter.getInt(device, "locX");
+        int locY = JsonConverter.getInt(device, "locY");
 
-        return Device.Make(deviceID, type, state, roomNr);
+        return Device.Make(deviceID, type, state, roomNr, locX, locY);
     }
 
 
@@ -190,6 +192,8 @@ public class JsonConverter {
         builder.add("deviceType", device.getDeviceType());
         builder.add("state", device.getState());
         builder.add("roomNr", device.getRoomNr());
+        builder.add("locX", device.getLocX());
+        builder.add("locY", device.getLocY());
 
         return builder.build();
     }

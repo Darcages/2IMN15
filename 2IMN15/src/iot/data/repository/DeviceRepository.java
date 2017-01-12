@@ -27,14 +27,17 @@ public class DeviceRepository {
      * @return True if the creation succeeded, otherwise false.
      */
     public boolean create(Device d) {
-        String query = "INSERT INTO devices (ID, DeviceType, State, RoomNr) " +
-                       "VALUES (?, ?, ?, ?);";
+        String query = "INSERT INTO devices (ID, DeviceType, State, RoomNr, LocX, LocY) " +
+                       "VALUES (?, ?, ?, ?, ?, ?);";
 
         Object[] data = {
             d.getDeviceID(),
             d.getDeviceType() ? "1" : "0",
             d.getState() ? "1" : "0",
-            d.getRoomNr()
+            d.getRoomNr(),
+            d.getLocX(),
+            d.getLocY()
+
         };
 
         try {
@@ -93,7 +96,7 @@ public class DeviceRepository {
      * @return The collection of existing device.
      */
     public ArrayList<Device> getAll() {
-        String query = "SELECT ID, DeviceType, State, RoomNr FROM devices";
+        String query = "SELECT ID, DeviceType, State, RoomNr, LocX, LocY FROM devices";
         Object[] data = {};
 
         try {
@@ -102,7 +105,9 @@ public class DeviceRepository {
                     rs.getInt("ID"),
                     rs.getBoolean("DeviceType"),
                     rs.getBoolean("State"),
-                    rs.getInt("RoomNr")
+                    rs.getInt("RoomNr"),
+                    rs.getInt("LocX"),
+                    rs.getInt("LocY")
                 );
             };
 

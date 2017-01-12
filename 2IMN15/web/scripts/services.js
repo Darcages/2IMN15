@@ -72,5 +72,71 @@ var services = {
                     return result;
                 });
         }
+    },
+
+    /**
+     * The UserAccount service.
+     */
+    device: {
+
+        /**
+         * The base URL of the Device service.
+         */
+        url: "/services/DeviceService",
+
+        /**
+         * Create a new device.
+         * @param deviceID The ID of the device
+         * @param deviceType The type of the device.
+         * @param state The state of the device.
+         * @param roomNr The number of the room of the device.
+         * @returns {Promise} The promise that will give the result of this call.
+         */
+        create: function(deviceID, deviceType, state, roomNr) {
+            return api
+                .post(
+                    services.device.url + "/create",
+                    {
+                        deviceID: deviceID,
+                        deviceType: deviceType,
+                        state: state,
+                        roomNr: roomNr
+                    })
+                .then(function(data) {
+                    return parseDevice(data);
+                });
+        },
+
+        /**
+         * Deletes the specified device.
+         * @param deviceID The deviceID of the device that is to be deleted.
+         * @returns A promise notifying whether or not it was successful.
+         */
+        delete: function(deviceID) {
+            return api.delete(
+                services.device.url + "/delete",
+                {
+                    'deviceID': deviceID
+                });
+        },
+
+        /**
+         * Retrieves all existing devices.
+         * @returns {Promise} The promise that will give the result of this call.
+         */
+        getAll: function() {
+            return api
+                .get(services.device.url + "/getAll")
+                .then(function(data) {
+                    var result = []
+
+                    for (var i = 0; i < data.length; i++) {
+                        result.push(parseDevice(data[i]));
+                    }
+
+                    return result;
+                });
+        }
     }
+
 }

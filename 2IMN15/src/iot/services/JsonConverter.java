@@ -1,9 +1,12 @@
 package iot.services;
 
 import iot.Conversion;
+import iot.domain.Device;
 import iot.domain.UserAccount;
 
 import javax.json.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.NoSuchElementException;
@@ -36,6 +39,24 @@ public class JsonConverter {
         JsonObjectBuilder builder = Json.createObjectBuilder();
         builder.add("successful", JsonValue.FALSE);
         builder.add("message", "An internal exception has occurred.");
+
+        return builder.build();
+    }
+
+    /**
+     * Creates a JSON object representing an internal exception.
+     * @return A JSON object containing a general message for an interal exception.
+     */
+    public static JsonObject ExceptionInternal(Exception e) {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        builder.add("successful", JsonValue.FALSE);
+
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        String exception = sw.toString(); // stack trace as a string
+
+        builder.add("message", "An internal exception has occurred: " + exception);
 
         return builder.build();
     }
@@ -137,6 +158,44 @@ public class JsonConverter {
     }
 
     /**
+     * Converts the provided JSON object to an Device object.
+     * @param device The device JSON that is to be converted.
+     * @return a new UserAccount object.
+     * @throws NoSuchElementException The provided JSON object is null.
+     * @throws NoSuchFieldException One of the required fields is missing.
+     */
+    public static Device toDevice(JsonObject device)
+            throws NoSuchElementException, NoSuchFieldException {
+
+        if (device == null)
+            throw new NoSuchElementException("No user account data has been provided.");
+
+        int deviceID = JsonConverter.getInt(device, "deviceID");
+        boolean type = JsonConverter.getBoolean(device, "deviceType");
+        boolean state = JsonConverter.getBoolean(device, "state");
+        int roomNr = JsonConverter.getInt(device, "roomNr");
+
+        return Device.Make(deviceID, type, state, roomNr);
+    }
+
+
+    /**
+     * Converts the provided device to its JSON object representation.
+     * @param device The device that is to be converted.
+     * @return The JSON representation of the provided object.
+     */
+    public static JsonObject toJson(Device device) {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        builder.add("deviceID", device.getDeviceID());
+        builder.add("deviceType", device.getDeviceType());
+        builder.add("state", device.getState());
+        builder.add("roomNr", device.getRoomNr());
+
+        return builder.build();
+    }
+
+
+    /**
      * Tries to retrieve the specified field from the JSON object.
      * @param obj The JSON object from which the field value is to be retrieved.
      * @param name The name of the property on the JSON object.
@@ -179,6 +238,37 @@ public class JsonConverter {
 
         return value.get().getString();
     }
+
+    /**
+     * Tries to retrieve the specified field from the JSON object.
+     * @param obj The JSON object from which the field value is to be retrieved.
+     * @param name The name of the property on the JSON object.
+     * @return The string value of the specified property on the provided JSON object.
+     * @throws NoSuchFieldException The property does not exist on the provided JSON object.
+     */
+    private static boolean getBoolean(JsonObject obj, String name) throws NoSuchFieldException {
+
+        if (!obj.containsKey(name))
+        {
+            throw new NoSuchFieldException(
+                    String.format("The field '%1s' is missing.", name));
+        }
+        /*
+        if (obj.get(name).getValueType() != JsonValue.ValueType.NUMBER) {
+            throw new NoSuchFieldException(
+                    String.format("The field '%1s' is not a boolean.", obj.getJsonString(name)));
+        }
+        if (!obj.getJsonNumber(name).isIntegral())
+        {
+            throw new NoSuchFieldException(
+                    String.format("The field '%1s' is not an integer.", name));
+        }
+*/
+
+
+        return obj.getBoolean(name);
+    }
+
 
     /**
      * Tries to retrieve the specified field from the JSON object.

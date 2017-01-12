@@ -94,4 +94,19 @@ public class Validation {
     public static void password(String password) {
         Validation.NonEmptyString(password, "The password cannot be empty.");
     }
+
+
+    /**
+     * Validates that the room number is non-negative.
+     * @param deviceID The room number that is to be validated.
+     * @throws IllegalArgumentException This exception is thrown if the provided room number is negative.
+     */
+    public static void deviceID(int deviceID) throws IllegalArgumentException {
+        if (deviceID < 1) {
+            throw new IllegalArgumentException(
+                    String.format("No deviceID with number '%s' exists.", deviceID));
+        }
+    }
+
+
 }

@@ -1,4 +1,5 @@
 import iot.data.repository.UserAccountRepository;
+import iot.services.DeviceService;
 import iot.services.UserAccountService;
 
 import javax.ws.rs.ApplicationPath;
@@ -20,6 +21,7 @@ public class Services extends Application {
     public Set<Class<?>> getClasses() {
         HashSet classes = new HashSet<Class<?>>();
         classes.add(UserAccountService.class);
+        classes.add(DeviceService.class);
 
         return classes;
     }

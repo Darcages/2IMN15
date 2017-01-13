@@ -26,7 +26,6 @@ var loadOverview = function() {
         .done(function(devices) {
             for (var i = 0; i < devices.length; i++) {
                 addDeviceToOverview(devices[i]);
-                console.log("device: ", $(devices[i]));
             }
         })
         .fail(function(error) {

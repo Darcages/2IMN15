@@ -1,4 +1,4 @@
-import iot.data.repository.UserAccountRepository;
+import iot.services.DeskService;
 import iot.services.DeviceService;
 import iot.services.UserAccountService;
 
@@ -22,6 +22,7 @@ public class Services extends Application {
         HashSet classes = new HashSet<Class<?>>();
         classes.add(UserAccountService.class);
         classes.add(DeviceService.class);
+        classes.add(DeskService.class);
 
         return classes;
     }

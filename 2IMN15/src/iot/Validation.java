@@ -34,6 +34,20 @@ public class Validation {
     }
 
     /**
+     * Validates that the user exists/
+     * @param userID The device that is to be validated.
+     * @throws IllegalArgumentException This exception is thrown if the provided room number is negative.
+     */
+    public static void userExist(int userID) throws IllegalArgumentException {
+        if (userID < 1) {
+            throw new IllegalArgumentException(
+                String.format("No user with id '%s' exists.", userID));
+        }
+        //TODO actuall checking whether or not user exists
+
+    }
+
+    /**
      * Validates that the room number is non-negative.
      * @param roomNr The room number that is to be validated.
      * @throws IllegalArgumentException This exception is thrown if the provided room number is negative.
@@ -41,7 +55,7 @@ public class Validation {
     public static void roomNr(int roomNr) throws IllegalArgumentException {
         if (roomNr < 1) {
             throw new IllegalArgumentException(
-                String.format("No room with number '%s' exists.", roomNr));
+                    String.format("No room with number '%s' exists.", roomNr));
         }
     }
 

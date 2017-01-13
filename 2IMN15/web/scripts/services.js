@@ -75,7 +75,7 @@ var services = {
     },
 
     /**
-     * The UserAccount service.
+     * The Device service.
      */
     device: {
 
@@ -139,6 +139,69 @@ var services = {
                     return result;
                 });
         }
+    },
+
+    /**
+     * The Desk service.
+     */
+    desk: {
+
+        /**
+         * The base URL of the Desk service.
+         */
+        url: "/services/DeskService",
+
+        /**
+         * Create a new desk.
+         * @param deskID The ID of the desk
+         * @returns {Promise} The promise that will give the result of this call.
+         */
+        create: function(deskID, userID, locX, locY) {
+            return api
+                .post(
+                    services.desk.url + "/create",
+                    {
+                        deskID: deskID,
+                        userID: userID,
+                        locX: locX,
+                        locY: locY
+                    })
+                .then(function(data) {
+                    return parseDesk(data);
+                });
+        },
+
+        /**
+         * Deletes the specified desk.
+         * @param deskID The deviceID of the device that is to be deleted.
+         * @returns A promise notifying whether or not it was successful.
+         */
+        delete: function(deskID) {
+            return api.delete(
+                services.desk.url + "/delete",
+                {
+                    'deskID': deskID
+                });
+        },
+
+        /**
+         * Retrieves all existing desks.
+         * @returns {Promise} The promise that will give the result of this call.
+         */
+        getAll: function() {
+            return api
+                .get(services.desk.url + "/getAll")
+                .then(function(data) {
+                    var result = []
+
+                    for (var i = 0; i < data.length; i++) {
+                        result.push(parseDesk(data[i]));
+                    }
+
+                    return result;
+                });
+        }
     }
+
 
 }

@@ -1,6 +1,7 @@
 package iot.services;
 
 import iot.Conversion;
+import iot.domain.Desk;
 import iot.domain.Device;
 import iot.domain.UserAccount;
 
@@ -200,6 +201,44 @@ public class JsonConverter {
 
 
     /**
+     * Converts the provided JSON object to an Desk object.
+     * @param desk The device JSON that is to be converted.
+     * @return a new Desk object.
+     * @throws NoSuchElementException The provided JSON object is null.
+     * @throws NoSuchFieldException One of the required fields is missing.
+     */
+    public static Desk toDesk(JsonObject desk)
+            throws NoSuchElementException, NoSuchFieldException {
+
+        if (desk == null)
+            throw new NoSuchElementException("No desk data has been provided.");
+
+        int deskID = JsonConverter.getInt(desk, "deskID");
+        int userID = JsonConverter.getInt(desk, "userID");
+        int locX = JsonConverter.getInt(desk, "locX");
+        int locY = JsonConverter.getInt(desk, "locY");
+
+        return Desk.Make(deskID, userID, locX, locY);
+    }
+
+
+    /**
+     * Converts the provided desk to its JSON object representation.
+     * @param desk The desk that is to be converted.
+     * @return The JSON representation of the provided object.
+     */
+    public static JsonObject toJson(Desk desk) {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        builder.add("deskID", desk.getDeskID());
+        builder.add("userID", desk.getUserID());
+        builder.add("locX", desk.getLocX());
+        builder.add("locY", desk.getLocY());
+
+        return builder.build();
+    }
+
+
+    /**
      * Tries to retrieve the specified field from the JSON object.
      * @param obj The JSON object from which the field value is to be retrieved.
      * @param name The name of the property on the JSON object.
@@ -214,7 +253,7 @@ public class JsonConverter {
         }
         if (obj.get(name).getValueType() != JsonValue.ValueType.NUMBER) {
             throw new NoSuchFieldException(
-                String.format("The field '%1s' is not a number.", name));
+                String.format("The field '%1s' is not a number." + obj.toString() + " " + obj.get(name).getValueType(), name));
         }
         if (!obj.getJsonNumber(name).isIntegral())
         {

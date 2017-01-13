@@ -3,6 +3,7 @@ package iot.services;
 import iot.Conversion;
 import iot.domain.Desk;
 import iot.domain.Device;
+import iot.domain.Device2Desk;
 import iot.domain.UserAccount;
 
 import javax.json.*;
@@ -233,6 +234,40 @@ public class JsonConverter {
         builder.add("userID", desk.getUserID());
         builder.add("locX", desk.getLocX());
         builder.add("locY", desk.getLocY());
+
+        return builder.build();
+    }
+
+
+    /**
+     * Converts the provided JSON object to an Device2Desk object.
+     * @param d2d The device JSON that is to be converted.
+     * @return a new Desk object.
+     * @throws NoSuchElementException The provided JSON object is null.
+     * @throws NoSuchFieldException One of the required fields is missing.
+     */
+    public static Device2Desk toDevice2Desk(JsonObject d2d)
+            throws NoSuchElementException, NoSuchFieldException {
+
+        if (d2d == null)
+            throw new NoSuchElementException("No desk data has been provided.");
+
+        int deskID = JsonConverter.getInt(d2d, "deskID");
+        int deviceID = JsonConverter.getInt(d2d, "deviceID");
+
+        return Device2Desk.Make(deskID, deviceID);
+    }
+
+
+    /**
+     * Converts the provided desk to its JSON object representation.
+     * @param d2d The desk that is to be converted.
+     * @return The JSON representation of the provided object.
+     */
+    public static JsonObject toJson(Device2Desk d2d) {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        builder.add("deskID", d2d.getDeskID());
+        builder.add("deviceID", d2d.getDeviceID());
 
         return builder.build();
     }

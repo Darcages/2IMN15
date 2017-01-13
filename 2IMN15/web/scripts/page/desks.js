@@ -99,7 +99,7 @@ var fillUsers = function() {
 
                 var row = toSelectionField(
                     users[i].groupNr,
-                    [users[i].firstName, users[i].prefix, users[i].lastName]);
+                    users[i].firstName + " " + users[i].prefix + " " + users[i].lastName);
 
                 $('#new-desk-input-user').append(row);
             }

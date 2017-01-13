@@ -1,4 +1,5 @@
 import iot.services.DeskService;
+import iot.services.Device2DeskService;
 import iot.services.DeviceService;
 import iot.services.UserAccountService;
 
@@ -23,6 +24,7 @@ public class Services extends Application {
         classes.add(UserAccountService.class);
         classes.add(DeviceService.class);
         classes.add(DeskService.class);
+        classes.add(Device2DeskService.class);
 
         return classes;
     }

@@ -201,6 +201,68 @@ var services = {
                     return result;
                 });
         }
+    },
+
+
+    /**
+     * The device2desk service.
+     */
+    device2desk: {
+
+        /**
+         * The base URL of the Desk service.
+         */
+        url: "/services/Device2DeskService",
+
+        /**
+         * Create a new desk.
+         * @param deskID The ID of the desk
+         * @returns {Promise} The promise that will give the result of this call.
+         */
+        create: function(deskID, deviceID) {
+            return api
+                .post(
+                    services.device2desk.url + "/create",
+                    {
+                        deskID: deskID,
+                        deviceID: deviceID
+                    })
+                .then(function(data) {
+                    return parseDevice2Desk(data);
+                });
+        },
+
+        /**
+         * Deletes the specified desk.
+         * @param deskID The deviceID of the device that is to be deleted.
+         * @returns A promise notifying whether or not it was successful.
+         */
+        delete: function(deskID, deviceID) {
+            return api.delete(
+                services.device2desk.url + "/delete",
+                {
+                    'deskID': deskID,
+                    'deviceID': deviceID
+                });
+        },
+
+        /**
+         * Retrieves all existing desks.
+         * @returns {Promise} The promise that will give the result of this call.
+         */
+        getAll: function() {
+            return api
+                .get(services.device2desk.url + "/getAll")
+                .then(function(data) {
+                    var result = []
+
+                    for (var i = 0; i < data.length; i++) {
+                        result.push(parseDevice2Desk(data[i]));
+                    }
+
+                    return result;
+                });
+        }
     }
 
 

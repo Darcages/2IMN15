@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 13, 2017 at 07:26 PM
+-- Generation Time: Jan 13, 2017 at 08:15 PM
 -- Server version: 5.7.16-0ubuntu0.16.04.1
 -- PHP Version: 5.6.29-1+deb.sury.org~xenial+1
 
@@ -39,6 +39,25 @@ CREATE TABLE `desks` (
 
 INSERT INTO `desks` (`ID`, `UserID`, `LocX`, `LocY`) VALUES
 (21, 4, 2, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `device2desk`
+--
+
+CREATE TABLE `device2desk` (
+  `DeskID` int(11) NOT NULL,
+  `DeviceID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `device2desk`
+--
+
+INSERT INTO `device2desk` (`DeskID`, `DeviceID`) VALUES
+(21, 1),
+(21, 4);
 
 -- --------------------------------------------------------
 
@@ -97,6 +116,12 @@ INSERT INTO `useraccount` (`GroupNr`, `RoomNr`, `FirstName`, `Prefix`, `LastName
 --
 ALTER TABLE `desks`
   ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `device2desk`
+--
+ALTER TABLE `device2desk`
+  ADD PRIMARY KEY (`DeskID`,`DeviceID`);
 
 --
 -- Indexes for table `devices`

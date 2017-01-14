@@ -27,6 +27,7 @@ public class Services extends Application {
         classes.add(DeviceService.class);
         classes.add(DeskService.class);
         classes.add(Device2DeskService.class);
+        classes.add(RoomService.class);
         classes.add(User2DeviceService.class);
 
         return classes;

@@ -29,7 +29,23 @@ var loadOverview = function() {
             }
         })
         .fail(function(error) {
-           console.log("Error during the retrieval of the user accounts: " + error)
+           console.log("Error during the retrieval of the user accounts: " + error);
+        });
+}
+
+var loadAvailableRooms = function() {
+    services.room
+        .getAllNrs()
+        .done(function(nrs) {
+            var selection = $('#new-user-input-room')
+
+            for (var i = 0; i < nrs.length; i++) {
+                var option = $('<option>').text(nrs[i]);
+                selection.append(option);
+            }
+        })
+        .fail(function(error) {
+           console.log("Error during the retrieval of the available rooms: " + error);
         });
 }
 
@@ -70,5 +86,6 @@ var create = function() {
 }
 
 $(function() {
+    loadAvailableRooms();
     loadOverview();
 })

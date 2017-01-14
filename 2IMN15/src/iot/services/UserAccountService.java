@@ -1,6 +1,7 @@
 package iot.services;
 
 import iot.data.Database;
+import iot.data.repository.RoomRepository;
 import iot.data.repository.UserAccountRepository;
 import iot.domain.UserAccount;
 
@@ -18,11 +19,8 @@ import java.util.Optional;
 @Path("/UserAccountService")
 public class UserAccountService {
 
-    private UserAccountRepository repos;
-
-    public UserAccountService() {
-        this.repos = new UserAccountRepository();
-    }
+    private UserAccountRepository repos = new UserAccountRepository();
+    private RoomRepository reposRoom = new RoomRepository();
 
     @GET
     @Path("/getAll")
@@ -53,6 +51,11 @@ public class UserAccountService {
                     String.format(
                         "There already exists an user account with the group number '%1s'.",
                         ua.getGroupNr()));
+            }
+
+            if (!this.reposRoom.getAllNrs().contains(ua.getRoomNr())) {
+                throw new IllegalArgumentException(
+                    String.format("No room with number '%s' exists.", ua.getRoomNr()));
             }
 
             this.repos.create(ua);

@@ -330,6 +330,26 @@ var services = {
                     return result;
                 });
         }
+    },
+
+
+    /**
+     * The Room service.
+     */
+    room: {
+
+        /**
+         * The base URL of the Room service.
+         */
+        url: "/services/RoomService",
+
+        /**
+         * Retrieves all existing room numbers.
+         * @returns {Promise} The promise that will give the result of this call.
+         */
+        getAllNrs: function () {
+            return api.get(services.room.url + "/getAllNrs");
+        }
     }
 
 

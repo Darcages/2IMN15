@@ -101,6 +101,19 @@ public class RoomRepository {
         return Optional.empty();
     }
 
+    public ArrayList<Integer> getAllNrs() {
+        String query = "SELECT RoomNr FROM room;";
+        Object[] data = { };
+
+        try {
+            return this.db.executeQuery(query, data, rs -> rs.getInt("RoomNr"));
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return new ArrayList<>();
+    }
+
     /**
      * Deletes the room identified by the provided room number.
      * @param roomNr The room number for which the room is to be deleted.

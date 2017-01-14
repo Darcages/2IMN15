@@ -6,10 +6,7 @@ import iot.domain.*;
 import javax.json.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -110,6 +107,21 @@ public class JsonConverter {
         for (T element: collection) {
             JsonObject obj = convert.apply(element);
             builder.add(obj);
+        }
+
+        return builder.build();
+    }
+
+    /**
+     * Converts the provided collection of integers to a JSON array.
+     * @param collection The collection that is to be converted.
+     * @return A JSON array representing the provided collection of integers.
+     */
+    public static JsonArray toJsonArray(Collection<Integer> collection) {
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+
+        for (int element: collection) {
+            builder.add(element);
         }
 
         return builder.build();

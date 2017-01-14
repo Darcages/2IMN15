@@ -1,5 +1,6 @@
 import iot.dns.BrokerDiscovery;
-import iot.services.UserAccountService;
+import iot.domain.User2Device;
+import iot.services.*;
 
 import javax.jmdns.ServiceInfo;
 import javax.ws.rs.ApplicationPath;
@@ -23,6 +24,10 @@ public class Services extends Application {
     public Set<Class<?>> getClasses() {
         HashSet classes = new HashSet<Class<?>>();
         classes.add(UserAccountService.class);
+        classes.add(DeviceService.class);
+        classes.add(DeskService.class);
+        classes.add(Device2DeskService.class);
+        classes.add(User2DeviceService.class);
 
         return classes;
     }

@@ -26,5 +26,6 @@
     <orderEntry type="library" name="mysql-connector-java-5.1.40-bin" level="project" />
     <orderEntry type="library" name="jmdns-3.5.1" level="project" />
     <orderEntry type="library" name="slf4j-1.7.22" level="project" />
+    <orderEntry type="library" name="javax.json-1.0" level="project" />
   </component>
 </module>

@@ -11,6 +11,9 @@
           <element id="library" level="project" name="jmdns-3.5.1" />
           <element id="library" level="project" name="slf4j-1.7.22" />
           <element id="library" level="project" name="mysql-connector-java-5.1.40-bin" />
+          <element id="library" level="project" name="Jersey-2.2" />
+          <element id="library" level="project" name="Mojarra-2.2.1" />
+          <element id="library" level="project" name="javax.json-1.0" />
         </element>
       </element>
     </root>

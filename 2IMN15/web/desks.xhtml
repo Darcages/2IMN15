@@ -1,0 +1,62 @@
+<ui:composition template="WEB-INF/templates/master.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">Building Manager App - Device Groups</ui:define>
+
+    <ui:define name="scripts">
+        <script type="application/javascript" src="/scripts/page/desks.js"></script>
+    </ui:define>
+
+    <ui:define name="content">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Location X</th>
+                    <th>Location Y</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="desks-overview"></tbody>
+        </table>
+
+
+        <form>
+            <div class="form-group">
+                <label class="control-label" for="new-desk-input-id">Device ID</label>
+                <input type="number" class="form-control" id="new-desk-input-id" placeholder="ID"/>
+            </div>
+
+            <div class="form-group">
+
+
+                <label class="control-label" for="new-desk-input-user">User ID</label>
+
+                <select class="form-control" id="new-desk-input-user">
+                    <option value="-1">Select</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="new-desk-input-locx">Location X</label>
+                <input type="number" class="form-control" id="new-desk-input-locx" placeholder="Location X"/>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="new-desk-input-locy">Location Y</label>
+                <input type="number" class="form-control" id="new-desk-input-locy" placeholder="Location Y"/>
+            </div>
+
+            <div class="form-group has-error" style="display:none;">
+                <label class="control-label" for="error-message">Error message</label>
+                <p class="help-block" id="error-message"></p>
+            </div>
+
+            <button type="button" class="btn btn-primary" onclick="create()">Create</button>
+        </form>
+    </ui:define>
+</ui:composition>

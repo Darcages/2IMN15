@@ -87,3 +87,15 @@ function toTableRowRemovable(id, array, remove) {
     row.append(cell);
     return row;
 }
+
+
+
+
+function toSelectionField(id, string){
+    var row = $('<option>')
+        .attr('value', id);
+
+    row.text(string);
+
+    return row;
+}

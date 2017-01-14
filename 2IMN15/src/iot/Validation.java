@@ -31,6 +31,20 @@ public class Validation {
     }
 
     /**
+     * Validates that the user exists/
+     * @param userID The device that is to be validated.
+     * @throws IllegalArgumentException This exception is thrown if the provided room number is negative.
+     */
+    public static void userExist(int userID) throws IllegalArgumentException {
+        if (userID < 1) {
+            throw new IllegalArgumentException(
+                String.format("No user with id '%s' exists.", userID));
+        }
+        //TODO actuall checking whether or not user exists
+
+    }
+
+    /**
      * Validates that the room number is non-negative.
      * @param roomNr The room number that is to be validated.
      * @throws IllegalArgumentException This exception is thrown if the provided room number is negative.
@@ -100,4 +114,43 @@ public class Validation {
     public static void password(String password) {
         Validation.NonEmptyString(password, "The password cannot be empty.");
     }
+
+
+    /**
+     * Validates that the room number is non-negative.
+     * @param deviceID The room number that is to be validated.
+     * @throws IllegalArgumentException This exception is thrown if the provided room number is negative.
+     */
+    public static void deviceID(int deviceID) throws IllegalArgumentException {
+        if (deviceID < 1) {
+            throw new IllegalArgumentException(
+                    String.format("No deviceID with number '%s' exists.", deviceID));
+        }
+    }
+
+    /**
+     * Validates that the color is withing range
+     * @param c The color that is to be validated.
+     * @throws IllegalArgumentException This exception is thrown if the color is not within bounds
+     */
+    public static void color(int c) throws IllegalArgumentException {
+        if (c < 0 || c > 255) {
+            throw new IllegalArgumentException(
+                    "A color has to be withing the range 0-255");
+        }
+    }
+
+    /**
+     * Validates that the priority level is withing range
+     * @param p The level that is to be validated.
+     * @throws IllegalArgumentException This exception is thrown if the prio level is not within bounds
+     */
+    public static void priolevel(int p) throws IllegalArgumentException {
+        if (p < 1 || p > 3) {
+            throw new IllegalArgumentException(
+                    "A priority level has to be withing the range 1-3");
+        }
+    }
+
+
 }

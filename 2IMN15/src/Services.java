@@ -1,6 +1,7 @@
-import iot.data.repository.UserAccountRepository;
+import iot.dns.BrokerDiscovery;
 import iot.services.UserAccountService;
 
+import javax.jmdns.ServiceInfo;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.util.HashSet;
@@ -11,6 +12,8 @@ import java.util.Set;
  */
 @ApplicationPath("/services")
 public class Services extends Application {
+
+    private static final BrokerDiscovery discovery = BrokerDiscovery.start();
 
     /**
      * The method returns a non-empty collection with classes, that must be included in the published JAX-RS

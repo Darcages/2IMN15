@@ -24,5 +24,7 @@
     <orderEntry type="library" scope="PROVIDED" name="GlassFish 4.1.1 - JSON Processing (JSR 353)" level="application_server_libraries" />
     <orderEntry type="library" name="Mojarra-2.2.1" level="project" />
     <orderEntry type="library" name="mysql-connector-java-5.1.40-bin" level="project" />
+    <orderEntry type="library" name="jmdns-3.5.1" level="project" />
+    <orderEntry type="library" name="slf4j-1.7.22" level="project" />
   </component>
 </module>

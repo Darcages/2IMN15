@@ -27,10 +27,7 @@ public class Validation {
      * @throws IllegalArgumentException This exception is thrown if the provided group number is negative.
      */
     public static void groupNr(int groupNr) throws IllegalArgumentException {
-        if (groupNr < 1) {
-            throw new IllegalArgumentException(
-                String.format("No group with number '%s' exists.", groupNr));
-        }
+        Validation.PositiveInt(groupNr, "The group number must be greater than 0.");
     }
 
     /**
@@ -39,10 +36,7 @@ public class Validation {
      * @throws IllegalArgumentException This exception is thrown if the provided room number is negative.
      */
     public static void roomNr(int roomNr) throws IllegalArgumentException {
-        if (roomNr < 1) {
-            throw new IllegalArgumentException(
-                String.format("No room with number '%s' exists.", roomNr));
-        }
+        Validation.PositiveInt(roomNr, "The room number must be greater than 0.");
     }
 
     /**
@@ -72,6 +66,18 @@ public class Validation {
      */
     public static void NonEmptyString(String value, String message) {
         if (value == null || value.isEmpty() || value.trim().length() == 0) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    /**
+     * Validates that the provided integer is equal to or greater than 1.
+     * @param value The value that is to be validated.
+     * @param message The error message that is thrown if the validation fails.
+     * @exception IllegalArgumentException This exception is thrown if the provided integer value is invalid.
+     */
+    public static  void PositiveInt(Integer value, String message) {
+        if (value == null || value < 1) {
             throw new IllegalArgumentException(message);
         }
     }

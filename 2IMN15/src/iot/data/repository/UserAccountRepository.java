@@ -5,10 +5,9 @@ import iot.data.Database;
 import iot.data.RowConversionFunction;
 import iot.domain.UserAccount;
 
-import java.sql.ResultSet;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.function.Function;
 
 /**
  * Created by Geert on 2017-01-11.
@@ -19,10 +18,13 @@ public class UserAccountRepository {
 
     /**
      * Creates a new instance of the UserAccountRepository class.
-     * @param db The database used to make a connection.
      */
-    public UserAccountRepository(Database db) {
-        this.db = db;
+    public UserAccountRepository() {
+        try {
+            this.db = Database.load();
+        } catch (IOException | NoSuchFieldException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

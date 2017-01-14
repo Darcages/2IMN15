@@ -21,11 +21,7 @@ public class UserAccountService {
     private UserAccountRepository repos;
 
     public UserAccountService() {
-        try {
-            this.repos = new UserAccountRepository(Database.load());
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        this.repos = new UserAccountRepository();
     }
 
     @GET
@@ -35,7 +31,7 @@ public class UserAccountService {
         try {
             ArrayList<UserAccount> accounts = this.repos.getAll();
 
-            JsonArray array = JsonConverter.toJsonArray(accounts, ua -> JsonConverter.toJson(ua));
+            JsonArray array = JsonConverter.toJsonArray(accounts, JsonConverter::toJson);
             return JsonConverter.Success(array);
         }
         catch (Exception ex) {

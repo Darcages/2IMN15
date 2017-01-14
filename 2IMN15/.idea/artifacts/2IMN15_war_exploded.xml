@@ -7,6 +7,11 @@
         <element id="directory" name="classes">
           <element id="module-output" name="2IMN15" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="jmdns-3.5.1" />
+          <element id="library" level="project" name="slf4j-1.7.22" />
+          <element id="library" level="project" name="mysql-connector-java-5.1.40-bin" />
+        </element>
       </element>
     </root>
   </artifact>

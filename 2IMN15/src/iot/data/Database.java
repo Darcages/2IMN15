@@ -1,6 +1,7 @@
 package iot.data;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import resources.ApplicationProperties;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.util.function.Function;
  */
 public class Database {
 
-    private static final String PropertiesFile = "/resources/database.properties";
+    private static final String PropertiesFile = "database.properties";
 
     private DataSource source;
 
@@ -111,13 +112,13 @@ public class Database {
     }
 
     public static Database load() throws IOException, NoSuchFieldException {
-        Properties props = Database.getProperties();
+        ApplicationProperties props = ApplicationProperties.open(PropertiesFile);
 
-        String server = Database.readStringProperty(props, "server");
-        int port = Database.readIntProperty(props, "port");
-        String username = Database.readStringProperty(props, "user");
-        String password = Database.readStringProperty(props, "password");
-        String database = Database.readStringProperty(props, "database");
+        String server = props.readString("server");
+        int port = props.readInt("port");
+        String username = props.readString("user");
+        String password = props.readString("password");
+        String database = props.readString("database");
 
         MysqlDataSource ds = new MysqlDataSource();
         ds.setServerName(server);
@@ -127,54 +128,6 @@ public class Database {
         ds.setDatabaseName(database);
 
         return new Database(ds);
-    }
-
-    /**
-     * Retrieves the database properties.
-     * @return The database properties.
-     * @throws IOException An exception has occurred during the retrieval of the properties.
-     */
-    private static Properties getProperties() throws IOException {
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        InputStream input = classLoader.getResourceAsStream(PropertiesFile);
-
-        try {
-            Properties props = new Properties();
-            props.load(input);
-
-            return props;
-        } finally {
-            input.close();
-        }
-    }
-
-    /**
-     * Reads the property from the set of properties.
-     * @param props The set of properties.
-     * @param name The name of the property for which the value is to be retrieved.
-     * @return The value of the property.
-     * @throws NoSuchFieldException The property is not defined.
-     */
-    private static String readStringProperty(Properties props, String name) throws NoSuchFieldException {
-        if (!props.containsKey("server")) {
-            throw new NoSuchFieldException("No property 'server' is defined.");
-        }
-
-        return props.getProperty(name);
-    }
-
-    /**
-     * Reads the property from the set of properties.
-     * @param props The set of properties.
-     * @param name The name of the property for which the value is to be retrieved.
-     * @return The value of the property.
-     * @throws NoSuchFieldException The property is not defined.
-     * @throws NumberFormatException The property does not contain an integer value.
-     */
-    private static int readIntProperty(Properties props, String name) throws NoSuchFieldException, NumberFormatException {
-        String value = readStringProperty(props, name);
-
-        return Integer.parseInt(value);
     }
 
     /**

@@ -122,5 +122,29 @@ public class Validation {
         }
     }
 
+    /**
+     * Validates that the color is withing range
+     * @param c The color that is to be validated.
+     * @throws IllegalArgumentException This exception is thrown if the color is not within bounds
+     */
+    public static void color(int c) throws IllegalArgumentException {
+        if (c < 0 || c > 255) {
+            throw new IllegalArgumentException(
+                    "A color has to be withing the range 0-255");
+        }
+    }
+
+    /**
+     * Validates that the priority level is withing range
+     * @param p The level that is to be validated.
+     * @throws IllegalArgumentException This exception is thrown if the prio level is not within bounds
+     */
+    public static void priolevel(int p) throws IllegalArgumentException {
+        if (p < 1 || p > 3) {
+            throw new IllegalArgumentException(
+                    "A priority level has to be withing the range 1-3");
+        }
+    }
+
 
 }

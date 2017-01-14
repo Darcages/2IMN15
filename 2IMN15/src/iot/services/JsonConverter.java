@@ -1,10 +1,7 @@
 package iot.services;
 
 import iot.Conversion;
-import iot.domain.Desk;
-import iot.domain.Device;
-import iot.domain.Device2Desk;
-import iot.domain.UserAccount;
+import iot.domain.*;
 
 import javax.json.*;
 import java.io.PrintWriter;
@@ -271,6 +268,54 @@ public class JsonConverter {
 
         return builder.build();
     }
+
+
+    /**
+     * Converts the provided JSON object to an User2Device object.
+     * @param user2device The binding JSON that is to be converted.
+     * @return a new User2Device object.
+     * @throws NoSuchElementException The provided JSON object is null.
+     * @throws NoSuchFieldException One of the required fields is missing.
+     */
+    public static User2Device toUser2Device(JsonObject user2device)
+            throws NoSuchElementException, NoSuchFieldException {
+
+        if (user2device == null)
+            throw new NoSuchElementException("No user2device has been provided.");
+
+        int userID = JsonConverter.getInt(user2device, "userID");
+        int deviceID = JsonConverter.getInt(user2device, "deviceID");
+        int priolevel = JsonConverter.getInt(user2device, "prioLevel");
+        int red = JsonConverter.getInt(user2device, "red");
+        int green = JsonConverter.getInt(user2device, "green");
+        int blue = JsonConverter.getInt(user2device, "blue");
+        boolean lowlight = JsonConverter.getBoolean(user2device, "lowLight");
+
+
+
+        return User2Device.Make(userID, deviceID, priolevel, red, green, blue, lowlight);
+    }
+
+    /**
+     * Converts the provided user2device to its JSON object representation.
+     * @param user2device The binding that is to be converted.
+     * @return The JSON representation of the provided object.
+     */
+    public static JsonObject toJson(User2Device user2device) {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        builder.add("userID", user2device.getUserID());
+        builder.add("deviceID", user2device.getDeviceID());
+        builder.add("prioLevel", user2device.getPrioLevel());
+        builder.add("red", user2device.getRed());
+        builder.add("green", user2device.getGreen());
+        builder.add("blue", user2device.getBlue());
+        builder.add("lowLight", user2device.getLowLight());
+
+
+
+        return builder.build();
+    }
+
 
 
     /**

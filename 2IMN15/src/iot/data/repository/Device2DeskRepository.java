@@ -91,6 +91,37 @@ public class Device2DeskRepository {
         return true;
     }
 
+
+    /**
+     * Returns true if there is still room left for a binding between a device and a desk
+     * Respects the limits of 2 lights and 1 sensor per desk.
+     * @param deskID The desk ID for which is to be checked.
+     * @param deviceID The device ID for which is to be checked.
+     * @return True a device with the devicetype of deviceID can still be made
+     */
+    public boolean roomLeftForDevice(int deskID, int deviceID) {
+        String query = "SELECT " +
+                "COUNT(devices.DeviceType), devices.DeviceType " +
+                "FROM device2desk, devices, devices as d2 " +
+                "WHERE device2desk.DeskID = ? AND device2desk.DeviceID = devices.ID AND devices.DeviceType = d2.DeviceType AND d2.ID = ?;";
+        Object[] data = { deskID, deviceID };
+
+        try {
+            RowConversionFunction<Integer[]> rowConversion = rs -> {
+                return new Integer[]{rs.getInt(1), rs.getInt(2)};
+            };
+
+            Integer[] result = this.db.executeQuery(query, data, rowConversion).get(0);
+            return (result[1] == 1 && result[0] < 2) || (result[1] == 0 && result[0] < 1);
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return true;
+    }
+
+
     /**
      * Retrieves all existing device
      * @return The collection of existing device.

@@ -54,9 +54,17 @@ public class Device2DeskService {
             if (this.repos.exists(d2d.getDeskID(), d2d.getDeviceID())) {
                 throw new IllegalArgumentException(
                     String.format(
-                        "There already exists an desk with ID '%1s' in combination with device ID '%1s'.",
+                        "There already exists a binding between a desk with ID '%1s' and a device with ID '%1s'.",
                         d2d.getDeskID(), d2d.getDeviceID()));
             }
+
+            if (!this.repos.roomLeftForDevice(d2d.getDeskID(), d2d.getDeviceID())) {
+                throw new IllegalArgumentException(
+                        "Only two lights and one sensor can be binded to one desk.");
+            }
+
+
+
 
             this.repos.create(d2d);
 

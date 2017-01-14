@@ -117,8 +117,72 @@ var fillDevices = function() {
         });
 }
 
+var fillTODO = function() {
+    services.device
+        .getAll()
+        .done(function(devices) {
+
+            services.desk
+                .getAll()
+                .done(function(desks) {
+
+                    services.device2desk
+                        .getAll()
+                        .done(function(d2ds) {
+
+                            for(var i = 0; i < devices.length; i++){
+                                var found = false;
+                                for(var j = 0; j < d2ds.length; j++){
+                                    if(devices[i].deviceID == d2ds[j].deviceID){
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if(!found){
+                                    var row = $('<li>');
+                                    row.text("Device with ID '" + devices[i].deviceID + "' is not yet assigned to a desk.");
+                                    $('#todos').append(row);
+                                }
+                            }
+
+                            var array = [];
+
+                            for(var i = 0; i < desks.length; i++){
+                                array[desks[i].deskID] = 0;
+                                for(var j = 0; j < d2ds.length; j++){
+                                    if(desks[i].deskID == d2ds[j].deskID){
+                                        array[desks[i].deskID] += 1;
+                                        console.log(desks[i].deskID + " becomes " + array[desks[i].deskID]);
+
+                                    }
+                                }
+                            }
+                            for(var i = 0; i < desks.length; i++){
+                                if(array[desks[i].deskID] < 3){
+                                    var row = $('<li>');
+                                    row.text("There are only " + array[desks[i].deskID] + " devices assigned to the desk with ID '" + desks[i].deskID + "'.");
+                                    $('#todos').append(row);
+                                }
+                            }
+
+
+                        })
+                        .fail(function(error) {
+                            console.log("Error during the retrieval of the d2ds: " + error)
+                        });
+                })
+                .fail(function(error) {
+                    console.log("Error during the retrieval of the desks: " + error)
+                });
+        })
+        .fail(function(error) {
+            console.log("Error during the retrieval of the devices: " + error)
+        });
+}
+
 
 $(function() {
+    fillTODO();
     fillDevices();
     fillDesks();
     loadOverview();

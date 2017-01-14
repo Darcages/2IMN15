@@ -1,7 +1,5 @@
-import iot.services.DeskService;
-import iot.services.Device2DeskService;
-import iot.services.DeviceService;
-import iot.services.UserAccountService;
+import iot.domain.User2Device;
+import iot.services.*;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -25,6 +23,7 @@ public class Services extends Application {
         classes.add(DeviceService.class);
         classes.add(DeskService.class);
         classes.add(Device2DeskService.class);
+        classes.add(User2DeviceService.class);
 
         return classes;
     }

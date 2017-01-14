@@ -1,0 +1,109 @@
+<ui:composition template="WEB-INF/templates/master.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="title">Building Manager App - User2Devices</ui:define>
+
+    <ui:define name="scripts">
+        <script type="application/javascript" src="/scripts/page/user2device.js"></script>
+    </ui:define>
+
+    <ui:define name="content">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Device ID</th>
+                    <th>Priority Level</th>
+                    <th>Red</th>
+                    <th>Green</th>
+                    <th>Blue</th>
+                    <th>LowLight</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="users2devices-overview"></tbody>
+        </table>
+
+
+        <form>
+            <!--
+            <div class="form-group">
+                <label class="control-label" for="new-u2d-input-userid">User ID</label>
+                <input type="number" class="form-control" id="new-u2d-input-userid" placeholder="User ID"/>
+            </div>
+            -->
+            <div class="form-group">
+                <label class="control-label" for="new-u2d-input-userid">User ID</label>
+                <select class="form-control" id="new-u2d-input-userid">
+                    <option value="-1">Select</option>
+                </select>
+            </div>
+
+
+<!--
+            <div class="form-group">
+                <label class="control-label" for="new-u2d-input-deviceid">Device ID</label>
+                <input type="number" class="form-control" id="new-u2d-input-deviceid" placeholder="Device ID"/>
+            </div>-->
+
+            <div class="form-group">
+                <label class="control-label" for="new-u2d-input-deviceid">Device ID</label>
+                <select class="form-control" id="new-u2d-input-deviceid">
+                    <option value="-1">Select</option>
+                </select>
+            </div>
+
+
+            <div class="form-group">
+                <label class="control-label" for="new-u2d-input-prio">Ownership Priority</label><br />
+                <form id="new-u2d-input-prio">
+                    <input id="new-u2d-input-prio-1" type="radio" name="prio" value="1" checked="checked"/> User 1
+                    <input id="new-u2d-input-prio-2" type="radio" name="prio" value="2" /> User 2
+                    <input id="new-u2d-input-prio-3" type="radio" name="prio" value="3" /> User 3
+                </form>
+            </div>
+
+
+
+            <div class="form-group">
+                <label class="control-label" for="new-u2d-input-red">Red</label>
+                <input type="number" class="form-control" id="new-u2d-input-red" placeholder="Red"/>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="new-u2d-input-green">Green</label>
+                <input type="number" class="form-control" id="new-u2d-input-green" placeholder="Green"/>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="new-u2d-input-blue">Blue</label>
+                <input type="number" class="form-control" id="new-u2d-input-blue" placeholder="Blue"/>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label" for="new-u2d-input-lowlight">Low Light</label><br />
+                <form id="new-u2d-input-lowlight">
+                    <input id="new-u2d-input-lowlight-true" type="radio" name="type" value="true" checked="checked"/> True<br />
+                    <input id="new-u2d-input-lowlight-false" type="radio" name="type" value="false" /> False<br />
+                </form>
+            </div>
+
+
+            <div class="form-group todos">
+                <label class="control-label" for="todos">To do:</label>
+                <ul class="help-block" id="todos"></ul>
+            </div>
+
+
+            <div class="form-group has-error" style="display:none;">
+                <label class="control-label" for="error-message">Error message</label>
+                <p class="help-block" id="error-message"></p>
+            </div>
+
+            <button type="button" class="btn btn-primary" onclick="create()">Create</button>
+        </form>
+    </ui:define>
+</ui:composition>

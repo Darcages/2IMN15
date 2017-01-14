@@ -15,6 +15,8 @@ public class Device {
     private int locY;
 
 
+
+
     /**
      * Initializes a new instance of the UserAccount class.
      */

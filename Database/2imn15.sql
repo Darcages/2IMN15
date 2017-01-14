@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 13, 2017 at 08:15 PM
+-- Generation Time: Jan 14, 2017 at 03:50 PM
 -- Server version: 5.7.16-0ubuntu0.16.04.1
 -- PHP Version: 5.6.29-1+deb.sury.org~xenial+1
 
@@ -57,7 +57,8 @@ CREATE TABLE `device2desk` (
 
 INSERT INTO `device2desk` (`DeskID`, `DeviceID`) VALUES
 (21, 1),
-(21, 4);
+(21, 2),
+(21, 8);
 
 -- --------------------------------------------------------
 
@@ -71,17 +72,57 @@ CREATE TABLE `devices` (
   `State` tinyint(1) NOT NULL,
   `RoomNr` int(11) NOT NULL,
   `LocX` int(11) NOT NULL,
-  `LocY` int(11) NOT NULL
+  `LocY` int(11) NOT NULL,
+  `User1R` int(11) NOT NULL,
+  `User1G` int(11) NOT NULL,
+  `User1B` int(11) NOT NULL,
+  `User1LL` tinyint(1) NOT NULL,
+  `User2R` int(11) NOT NULL,
+  `User2G` int(11) NOT NULL,
+  `User2B` int(11) NOT NULL,
+  `User2LL` tinyint(1) NOT NULL,
+  `User3R` int(11) NOT NULL,
+  `User3G` int(11) NOT NULL,
+  `User3B` int(11) NOT NULL,
+  `User3LL` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `devices`
 --
 
-INSERT INTO `devices` (`ID`, `DeviceType`, `State`, `RoomNr`, `LocX`, `LocY`) VALUES
-(1, 1, 1, 3, 0, 0),
-(4, 1, 0, 4, 2, 3),
-(8, 0, 0, 6, 0, 0);
+INSERT INTO `devices` (`ID`, `DeviceType`, `State`, `RoomNr`, `LocX`, `LocY`, `User1R`, `User1G`, `User1B`, `User1LL`, `User2R`, `User2G`, `User2B`, `User2LL`, `User3R`, `User3G`, `User3B`, `User3LL`) VALUES
+(1, 1, 1, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(2, 1, 0, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(4, 1, 0, 4, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(8, 0, 0, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(16, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(32, 1, 0, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user2device`
+--
+
+CREATE TABLE `user2device` (
+  `UserID` int(11) NOT NULL,
+  `DeviceID` int(11) NOT NULL,
+  `PrioLevel` int(11) NOT NULL,
+  `Red` int(11) NOT NULL,
+  `Green` int(11) NOT NULL,
+  `Blue` int(11) NOT NULL,
+  `LowLight` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `user2device`
+--
+
+INSERT INTO `user2device` (`UserID`, `DeviceID`, `PrioLevel`, `Red`, `Green`, `Blue`, `LowLight`) VALUES
+(2, 1, 1, 255, 255, 255, 0),
+(2, 2, 2, 2, 2, 2, 1),
+(2, 4, 2, 2, 2, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -130,6 +171,12 @@ ALTER TABLE `devices`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- Indexes for table `user2device`
+--
+ALTER TABLE `user2device`
+  ADD PRIMARY KEY (`UserID`,`DeviceID`);
+
+--
 -- Indexes for table `useraccount`
 --
 ALTER TABLE `useraccount`
@@ -144,12 +191,12 @@ ALTER TABLE `useraccount`
 -- AUTO_INCREMENT for table `desks`
 --
 ALTER TABLE `desks`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT for table `devices`
 --
 ALTER TABLE `devices`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

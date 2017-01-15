@@ -350,6 +350,56 @@ var services = {
         getAllNrs: function () {
             return api.get(services.room.url + "/getAllNrs");
         }
+    },
+
+
+    /**
+     * The Room service.
+     */
+    event: {
+
+        /**
+         * The base URL of the Room service.
+         */
+        url: "/services/EventService",
+
+
+        /**
+         * Create a new desk.
+         * @param deskID The ID of the desk
+         * @returns {Promise} The promise that will give the result of this call.
+         */
+        create: function(deviceID, userID, newState) {
+            return api
+                .post(
+                    services.event.url + "/create",
+                    {
+                        deviceID: deviceID,
+                        userID: userID,
+                        newState: newState
+                    })
+                .then(function(data) {
+                    return parseEvent(data);
+                });
+        },
+
+        /**
+         * Retrieves all existing events.
+         * @returns {Promise} The promise that will give the result of this call.
+         */
+        getAll: function () {
+            return api
+                .get(services.event.url + "/getAll")
+                .then(function(data) {
+                    var result = []
+
+                    for (var i = 0; i < data.length; i++) {
+                        result.push(parseEvent(data[i]));
+                    }
+
+                    return result;
+                });
+        }
     }
 
 

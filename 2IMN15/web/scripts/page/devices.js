@@ -92,6 +92,15 @@ var create = function() {
         .fail(function(error) {
             setErrorMessage(error);
         });
+
+    services.event
+        .create(deviceID, -1, false)
+        .fail(function(error) {
+            setErrorMessage(error);
+        });
+
+
+
 }
 
 $(function() {

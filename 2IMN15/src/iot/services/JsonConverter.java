@@ -334,8 +334,8 @@ public class JsonConverter {
 
 
     /**
-     * Converts the provided JSON object to an User2Device object.
-     * @param user2device The binding JSON that is to be converted.
+     * Converts the provided JSON object to an event object.
+     * @param event The event JSON that is to be converted.
      * @return a new User2Device object.
      * @throws NoSuchElementException The provided JSON object is null.
      * @throws NoSuchFieldException One of the required fields is missing.
@@ -346,7 +346,13 @@ public class JsonConverter {
         if (event == null)
             throw new NoSuchElementException("No event has been provided.");
 
-        Date timeStamp = JsonConverter.getDatetime(event, "timestamp");
+        Date timeStamp;
+        try {
+            timeStamp = JsonConverter.getDatetime(event, "timestamp");
+        }
+        catch(NoSuchFieldException e){
+            timeStamp = new Date();
+        }
 
         int deviceID = JsonConverter.getInt(event, "deviceID");
         int userID = JsonConverter.getInt(event, "userID");

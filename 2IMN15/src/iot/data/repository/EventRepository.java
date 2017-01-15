@@ -83,7 +83,8 @@ public class EventRepository {
         try {
             RowConversionFunction<Event> rowConversion = rs -> {
                 return Event.Make(
-                        rs.getDate("timestamp"),
+                        new Date(rs.getTimestamp("timestamp").getTime()),
+                        //rs.getDate("timestamp"),
                         rs.getInt("deviceID"),
                         rs.getInt("userID"),
                         rs.getBoolean("newState")

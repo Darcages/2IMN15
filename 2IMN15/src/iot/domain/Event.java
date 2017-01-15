@@ -46,6 +46,8 @@ public class Event {
         Validation.deviceID(deviceID);
 
         Event e = new Event();
+
+
         e.timestamp = timestamp;
         e.deviceID = deviceID;
         e.userID = userID;

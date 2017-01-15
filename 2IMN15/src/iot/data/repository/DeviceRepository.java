@@ -118,4 +118,31 @@ public class DeviceRepository {
 
         return new ArrayList<>();
     }
+
+    /**
+     * Updates the state of a device.
+     * @param id The device that is to be updated.
+     * @param newState The new state of the device
+     * @return True if the update succeeded, otherwise false.
+     */
+    public boolean updateState(int id, boolean newState) {
+        String query = "UPDATE devices " +
+                "SET State = ?" +
+                "WHERE ID = ?;";
+
+        Object[] data = {
+                newState,
+                id
+        };
+
+        try {
+            this.db.executeQuery(query, data);
+            return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return false;
+    }
+
 }

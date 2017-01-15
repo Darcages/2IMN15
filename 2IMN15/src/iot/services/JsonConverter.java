@@ -6,6 +6,8 @@ import iot.domain.*;
 import javax.json.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
 
@@ -330,6 +332,52 @@ public class JsonConverter {
 
 
 
+
+    /**
+     * Converts the provided JSON object to an User2Device object.
+     * @param user2device The binding JSON that is to be converted.
+     * @return a new User2Device object.
+     * @throws NoSuchElementException The provided JSON object is null.
+     * @throws NoSuchFieldException One of the required fields is missing.
+     */
+    public static Event toEvent(JsonObject event)
+            throws NoSuchElementException, NoSuchFieldException {
+
+        if (event == null)
+            throw new NoSuchElementException("No event has been provided.");
+
+        Date timeStamp = JsonConverter.getDatetime(event, "timestamp");
+
+        int deviceID = JsonConverter.getInt(event, "deviceID");
+        int userID = JsonConverter.getInt(event, "userID");
+        boolean newState = JsonConverter.getBoolean(event, "newState");
+
+        return Event.Make(timeStamp, deviceID, userID, newState);
+    }
+
+    /**
+     * Converts the provided event to its JSON object representation.
+     * @param event The event that is to be converted.
+     * @return The JSON representation of the provided object.
+     */
+    public static JsonObject toJson(Event event) {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+
+        SimpleDateFormat pattern = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        builder.add("timestamp", pattern.format(event.getTimestamp()));
+        builder.add("deviceID", event.getDeviceID());
+        builder.add("userID", event.getUserID());
+        builder.add("newState", event.getNewState());
+
+
+
+        return builder.build();
+    }
+
+
+
+
     /**
      * Tries to retrieve the specified field from the JSON object.
      * @param obj The JSON object from which the field value is to be retrieved.
@@ -345,7 +393,7 @@ public class JsonConverter {
         }
         if (obj.get(name).getValueType() != JsonValue.ValueType.NUMBER) {
             throw new NoSuchFieldException(
-                String.format("The field '%1s' is not a number." + obj.toString() + " " + obj.get(name).getValueType(), name));
+                String.format("The field '%1s' is not a number.", name));
         }
         if (!obj.getJsonNumber(name).isIntegral())
         {
@@ -355,6 +403,31 @@ public class JsonConverter {
 
         return obj.getInt(name);
     }
+
+    /**
+     * Tries to retrieve the specified field from the JSON object.
+     * @param obj The JSON object from which the field value is to be retrieved.
+     * @param name The name of the property on the JSON object.
+     * @return The int value of the specified property on the provided JSON object.
+     * @throws NoSuchFieldException The property does not exist on the provided JSON object.
+     */
+    private static Date getDatetime(JsonObject obj, String name) throws NoSuchFieldException {
+        if (!obj.containsKey(name))
+        {
+            throw new NoSuchFieldException(
+                    String.format("The field '%1s' is missing.", name));
+        }
+        SimpleDateFormat fromUser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        try{
+            return fromUser.parse(obj.toString());
+        } catch (ParseException e) {
+            throw new NoSuchFieldException(
+                    String.format("The field '%1s' is not a Date." + obj.toString() + " " + obj.get(name).getValueType(), name));
+        }
+
+    }
+
 
     /**
      * Tries to retrieve the specified field from the JSON object.

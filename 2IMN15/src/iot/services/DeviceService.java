@@ -2,13 +2,16 @@ package iot.services;
 
 import iot.data.Database;
 import iot.data.repository.DeviceRepository;
+import iot.data.repository.EventRepository;
 import iot.domain.Device;
+import iot.domain.Event;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.NoSuchElementException;
 
 
@@ -85,4 +88,21 @@ public class DeviceService {
             return JsonConverter.ExceptionInternal();
         }
     }
+
+    @POST
+    @Path("/updateState")
+    @Produces(MediaType.APPLICATION_JSON)
+    public JsonObject updateState(@QueryParam("deviceID") int deviceID, @QueryParam("newState") boolean newState, @QueryParam("userID") int userID){
+        try {
+            this.repos.updateState(deviceID, newState);
+            Event e = Event.Make(new Date(), deviceID, userID, newState);
+            new EventRepository(Database.load()).create(e);
+            return JsonConverter.Success();
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            return JsonConverter.ExceptionInternal();
+        }
+    }
+
 }

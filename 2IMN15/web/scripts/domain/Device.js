@@ -24,7 +24,8 @@ function Device(deviceID, deviceType, state, roomNr, locX, locY, deployment) {
 
     self.stateString = function () {
         if(self.deviceType){
-            if(self.state) return "On";
+            if(self.state == '1') return "On";
+            else if(self.state == '2') return "Dimmed";
             else return "Off";
         }
         else {

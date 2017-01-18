@@ -25,7 +25,7 @@ public class DeviceLight extends Device {
      */
     public static DeviceLight Make(
         int deviceID,
-        boolean state,
+        int state,
         int roomNr,
         int locX,
         int locY,

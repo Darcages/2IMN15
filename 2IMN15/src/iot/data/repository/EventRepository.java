@@ -27,14 +27,15 @@ public class EventRepository {
      * @return True if the creation succeeded, otherwise false.
      */
     public boolean create(Event event) {
-        String query = "INSERT INTO events (timestamp, deviceID, userID, newState) " +
-                "VALUES (?, ?, ?, ?);";
+        String query = "INSERT INTO events (timestamp, deviceID, userID, newState, userType) " +
+                "VALUES (?, ?, ?, ?, ?);";
 
         Object[] data = {
             event.getTimestamp(),
             event.getDeviceID(),
             event.getUserID(),
-            event.getNewState()
+            event.getNewState(),
+            event.getUserType()
         };
 
         try {
@@ -77,7 +78,7 @@ public class EventRepository {
      * @return The collection of existing device.
      */
     public ArrayList<Event> getAll() {
-        String query = "SELECT timestamp, deviceID, userID, newState FROM events";
+        String query = "SELECT timestamp, deviceID, userID, newState, userType FROM events";
         Object[] data = {};
 
         try {
@@ -87,7 +88,8 @@ public class EventRepository {
                         //rs.getDate("timestamp"),
                         rs.getInt("deviceID"),
                         rs.getInt("userID"),
-                        rs.getBoolean("newState")
+                        rs.getInt("newState"),
+                        rs.getInt("userType")
                 );
             };
 

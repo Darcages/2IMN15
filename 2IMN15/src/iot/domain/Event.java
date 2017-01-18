@@ -9,7 +9,8 @@ public class Event {
     private Date timestamp;
     private int deviceID;
     private int userID;
-    private boolean newState;
+    private int newState; //0 = off, 1 = 0n, 2 = dimmed on
+    private int userType;
 
 
     /**
@@ -24,7 +25,8 @@ public class Event {
         return this.deviceID;
     }
     public int getUserID() { return this.userID; }
-    public boolean getNewState() { return this.newState; }
+    public int getNewState() { return this.newState; }
+    public int getUserType() { return this.userType; }
 
 
     /**
@@ -33,6 +35,7 @@ public class Event {
      * @param deviceID .
      * @param userID .
      * @param newState .
+     * @param userType .
      * @return A new instance of the Event class with the provided data.
      * @exception IllegalArgumentException This exception is thrown if one or more of the provided parameters is
      *                                     invalid.
@@ -41,7 +44,8 @@ public class Event {
             Date timestamp,
             int deviceID,
             int userID,
-            boolean newState
+            int newState,
+            int userType
     ) {
         Validation.deviceID(deviceID);
 
@@ -52,6 +56,7 @@ public class Event {
         e.deviceID = deviceID;
         e.userID = userID;
         e.newState = newState;
+        e.userType = userType;
 
         return e;
     }

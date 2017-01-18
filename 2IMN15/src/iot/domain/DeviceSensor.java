@@ -18,7 +18,7 @@ public class DeviceSensor extends Device {
      */
     public static DeviceSensor Make(
         int deviceID,
-        boolean state,
+        int state,
         int roomNr,
         int locX,
         int locY

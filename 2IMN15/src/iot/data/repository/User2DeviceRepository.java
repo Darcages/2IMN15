@@ -128,6 +128,39 @@ public class User2DeviceRepository {
         return new ArrayList<>();
     }
 
+
+    /**
+     * Retrieves all existing bindings between users and devices
+     * @return The collection of existing bindings.
+     */
+    public User2Device getUser2Device(int userID, int deviceID) {
+        String query = "SELECT UserID, DeviceID, PrioLevel, Red, Green, Blue, LowLight FROM user2device WHERE UserID=? AND DeviceID=?";
+        Object[] data = {userID, deviceID};
+
+        try {
+            RowConversionFunction<User2Device> rowConversion = rs -> {
+                return User2Device.Make(
+                        rs.getInt("UserID"),
+                        rs.getInt("DeviceID"),
+                        rs.getInt("PrioLevel"),
+                        rs.getInt("Red"),
+                        rs.getInt("Green"),
+                        rs.getInt("Blue"),
+                        rs.getBoolean("LowLight")
+
+                );
+            };
+
+            ArrayList<User2Device> result = this.db.executeQuery(query, data, rowConversion);
+            return result.get(0);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return null;
+    }
+
+
     /**
      * Updates the provided user2device.
      * @param d The user2device that is to be updated.

@@ -32,7 +32,7 @@ public class DeviceRepository {
         ArrayList<Object> data = new ArrayList<>();
         data.add(d.getDeviceID());
         data.add(d.getDeviceType() ? "1" : "0");
-        data.add(d.getState() ? "1" : "0");
+        data.add(d.getState());
         data.add(d.getRoomNr());
         data.add(d.getLocX());
         data.add(d.getLocY());
@@ -111,7 +111,7 @@ public class DeviceRepository {
                 if (type) {
                     return DeviceLight.Make(
                         rs.getInt("ID"),
-                        rs.getBoolean("State"),
+                        rs.getInt("State"),
                         rs.getInt("RoomNr"),
                         rs.getInt("LocX"),
                         rs.getInt("LocY"),
@@ -120,7 +120,7 @@ public class DeviceRepository {
                 } else {
                     return DeviceSensor.Make(
                         rs.getInt("ID"),
-                        rs.getBoolean("State"),
+                        rs.getInt("State"),
                         rs.getInt("RoomNr"),
                         rs.getInt("LocX"),
                         rs.getInt("LocY")
@@ -139,13 +139,11 @@ public class DeviceRepository {
     /**
      * Updates the state of a device.
      * @param id The device that is to be updated.
-     * @param newState The new state of the device
+     * @param newState The new state of the device, 0 for off, 1 for on, 2 for dimmed on
      * @return True if the update succeeded, otherwise false.
      */
-    public boolean updateState(int id, boolean newState) {
-        String query = "UPDATE devices " +
-                "SET State = ?" +
-                "WHERE ID = ?;";
+    public boolean updateState(int id, int newState) {
+        String query = "UPDATE devices SET State = ?  WHERE ID = ?;";
 
         Object[] data = {
                 newState,

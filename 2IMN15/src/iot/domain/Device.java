@@ -9,7 +9,7 @@ import java.util.Optional;
 public abstract class Device {
     protected int deviceID;
     protected boolean deviceType;
-    protected boolean state;
+    protected int state;
     protected int roomNr;
     protected int locX;
     protected int locY;
@@ -21,7 +21,7 @@ public abstract class Device {
 
     public boolean getDeviceType() { return this.deviceType; }
 
-    public boolean getState() {
+    public int getState() {
         return this.state;
     }
 

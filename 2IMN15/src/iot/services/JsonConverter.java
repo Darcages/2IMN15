@@ -185,7 +185,7 @@ public class JsonConverter {
 
         int deviceID = JsonConverter.getInt(device, "deviceID");
         boolean type = JsonConverter.getBoolean(device, "deviceType");
-        boolean state = JsonConverter.getBoolean(device, "state");
+        int state = JsonConverter.getInt(device, "state");
         int roomNr = JsonConverter.getInt(device, "roomNr");
         int locX = JsonConverter.getInt(device, "locX");
         int locY = JsonConverter.getInt(device, "locY");
@@ -388,9 +388,10 @@ public class JsonConverter {
 
         int deviceID = JsonConverter.getInt(event, "deviceID");
         int userID = JsonConverter.getInt(event, "userID");
-        boolean newState = JsonConverter.getBoolean(event, "newState");
+        int newState = JsonConverter.getInt(event, "newState");
+        int userType = JsonConverter.getInt(event, "userType");
 
-        return Event.Make(timeStamp, deviceID, userID, newState);
+        return Event.Make(timeStamp, deviceID, userID, newState, userType);
     }
 
     /**
@@ -407,6 +408,7 @@ public class JsonConverter {
         builder.add("deviceID", event.getDeviceID());
         builder.add("userID", event.getUserID());
         builder.add("newState", event.getNewState());
+        builder.add("userType", event.getUserType());
 
 
 

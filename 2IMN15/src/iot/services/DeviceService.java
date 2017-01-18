@@ -3,9 +3,12 @@ package iot.services;
 import iot.data.Database;
 import iot.data.repository.DeviceRepository;
 import iot.data.repository.EventRepository;
+import iot.data.repository.User2DeviceRepository;
+import iot.data.repository.UserAccountRepository;
 import iot.domain.DeploymentType;
 import iot.domain.Device;
 import iot.domain.Event;
+import iot.domain.User2Device;
 import jdk.nashorn.internal.parser.JSONParser;
 
 import javax.json.JsonArray;
@@ -94,10 +97,12 @@ public class DeviceService {
     @POST
     @Path("/updateState")
     @Produces(MediaType.APPLICATION_JSON)
-    public JsonObject updateState(@QueryParam("deviceID") int deviceID, @QueryParam("newState") boolean newState, @QueryParam("userID") int userID){
+    public JsonObject updateState(@QueryParam("deviceID") int deviceID, @QueryParam("newState") int newState, @QueryParam("userID") int userID){
         try {
+            User2DeviceRepository userRepo = new User2DeviceRepository(Database.load());
+            User2Device u2d = userRepo.getUser2Device(userID, deviceID);
             this.repos.updateState(deviceID, newState);
-            Event e = Event.Make(new Date(), deviceID, userID, newState);
+            Event e = Event.Make(new Date(), deviceID, userID, newState, u2d.getPrioLevel());
             new EventRepository(Database.load()).create(e);
             return JsonConverter.Success();
         }

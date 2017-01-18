@@ -385,14 +385,15 @@ var services = {
          * @param deskID The ID of the desk
          * @returns {Promise} The promise that will give the result of this call.
          */
-        create: function(deviceID, userID, newState) {
+        create: function(deviceID, userID, newState, userType) {
             return api
                 .post(
                     services.event.url + "/create",
                     {
                         deviceID: deviceID,
                         userID: userID,
-                        newState: newState
+                        newState: newState,
+                        userType: userType
                     })
                 .then(function(data) {
                     return parseEvent(data);

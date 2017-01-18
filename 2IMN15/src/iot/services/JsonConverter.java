@@ -181,7 +181,7 @@ public class JsonConverter {
             throws NoSuchElementException, NoSuchFieldException {
 
         if (device == null)
-            throw new NoSuchElementException("No user account data has been provided.");
+            throw new NoSuchElementException("No device data has been provided.");
 
         int deviceID = JsonConverter.getInt(device, "deviceID");
         boolean type = JsonConverter.getBoolean(device, "deviceType");
@@ -190,7 +190,33 @@ public class JsonConverter {
         int locX = JsonConverter.getInt(device, "locX");
         int locY = JsonConverter.getInt(device, "locY");
 
-        return Device.Make(deviceID, type, state, roomNr, locX, locY);
+        if (type) {
+            int deploymentType = JsonConverter.getInt(device, "deploymentType");
+            DeploymentType deployment = DeploymentType.Parse(deploymentType);
+
+            if (deployment == DeploymentType.Unknown) {
+                throw new IllegalArgumentException(String.format(
+                        "The deployment type '%s' is unknown.",
+                        deploymentType));
+            }
+
+            return DeviceLight.Make(
+                    deviceID,
+                    state,
+                    roomNr,
+                    locX,
+                    locY,
+                    deployment
+            );
+        } else {
+            return DeviceSensor.Make(
+                    deviceID,
+                    state,
+                    roomNr,
+                    locX,
+                    locY
+            );
+        }
     }
 
 
@@ -207,6 +233,12 @@ public class JsonConverter {
         builder.add("roomNr", device.getRoomNr());
         builder.add("locX", device.getLocX());
         builder.add("locY", device.getLocY());
+
+        if (device instanceof DeviceLight) {
+            DeviceLight deviceL = (DeviceLight)device;
+
+            builder.add("deployment", deviceL.getDeployment().getType());
+        }
 
         return builder.build();
     }
@@ -391,7 +423,7 @@ public class JsonConverter {
      * @return The int value of the specified property on the provided JSON object.
      * @throws NoSuchFieldException The property does not exist on the provided JSON object.
      */
-    private static int getInt(JsonObject obj, String name) throws NoSuchFieldException {
+    public static int getInt(JsonObject obj, String name) throws NoSuchFieldException {
         if (!obj.containsKey(name))
         {
             throw new NoSuchFieldException(
@@ -417,7 +449,7 @@ public class JsonConverter {
      * @return The int value of the specified property on the provided JSON object.
      * @throws NoSuchFieldException The property does not exist on the provided JSON object.
      */
-    private static Date getDatetime(JsonObject obj, String name) throws NoSuchFieldException {
+    public static Date getDatetime(JsonObject obj, String name) throws NoSuchFieldException {
         if (!obj.containsKey(name))
         {
             throw new NoSuchFieldException(
@@ -442,7 +474,7 @@ public class JsonConverter {
      * @return The string value of the specified property on the provided JSON object.
      * @throws NoSuchFieldException The property does not exist on the provided JSON object.
      */
-    private static String getString(JsonObject obj, String name) throws NoSuchFieldException {
+    public static String getString(JsonObject obj, String name) throws NoSuchFieldException {
         Optional<JsonString> value = Optional.ofNullable(obj.getJsonString(name));
 
         if (!value.isPresent()) {
@@ -460,7 +492,7 @@ public class JsonConverter {
      * @return The string value of the specified property on the provided JSON object.
      * @throws NoSuchFieldException The property does not exist on the provided JSON object.
      */
-    private static boolean getBoolean(JsonObject obj, String name) throws NoSuchFieldException {
+    public static boolean getBoolean(JsonObject obj, String name) throws NoSuchFieldException {
 
         if (!obj.containsKey(name))
         {
@@ -491,7 +523,7 @@ public class JsonConverter {
      * @return The string value of the specified property on the provided JSON object. The optional is empty if the
      *         property is not defined or it is empty.
      */
-    private static Optional<String> getStringOptional(JsonObject obj, String name) {
+    public static Optional<String> getStringOptional(JsonObject obj, String name) {
         Optional<JsonString> value = Optional.ofNullable(obj.getJsonString(name));
 
         return value

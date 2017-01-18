@@ -3,8 +3,10 @@ package iot.services;
 import iot.data.Database;
 import iot.data.repository.DeviceRepository;
 import iot.data.repository.EventRepository;
+import iot.domain.DeploymentType;
 import iot.domain.Device;
 import iot.domain.Event;
+import jdk.nashorn.internal.parser.JSONParser;
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -33,9 +35,9 @@ public class DeviceService {
     @Produces(MediaType.APPLICATION_JSON)
     public JsonObject getAll() {
         try {
-            ArrayList<Device> accounts = this.repos.getAll();
+            ArrayList<Device> devices = this.repos.getAll();
 
-            JsonArray array = JsonConverter.toJsonArray(accounts, d -> JsonConverter.toJson(d));
+            JsonArray array = JsonConverter.toJsonArray(devices, d -> JsonConverter.toJson(d));
             return JsonConverter.Success(array);
         }
         catch (Exception ex) {
@@ -105,4 +107,34 @@ public class DeviceService {
         }
     }
 
+    @POST
+    @Path("/updateDeployment")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public JsonObject updateDeployment(JsonObject data) {
+        try {
+            int id = JsonConverter.getInt(data,  "deviceID");
+            int type = JsonConverter.getInt(data, "deployment");
+
+            DeploymentType deployment = DeploymentType.Parse(type);
+
+            if (deployment == DeploymentType.Unknown) {
+                throw new IllegalArgumentException(String.format(
+                        "The type '%s' is an unknown deployment type.",
+                        type
+                ));
+            }
+
+            this.repos.updateDeployment(id, deployment);
+            return JsonConverter.Success();
+        }
+        catch (IllegalArgumentException | NoSuchElementException ex)
+        {
+            return JsonConverter.Exception(ex);
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            return JsonConverter.ExceptionInternal();
+        }
+    }
 }

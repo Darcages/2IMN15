@@ -1,9 +1,8 @@
 package iot.data.repository;
 
-import iot.Conversion;
 import iot.data.Database;
 import iot.data.RowConversionFunction;
-import iot.domain.Device;
+import iot.domain.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,21 +26,27 @@ public class DeviceRepository {
      * @return True if the creation succeeded, otherwise false.
      */
     public boolean create(Device d) {
-        String query = "INSERT INTO devices (ID, DeviceType, State, RoomNr, LocX, LocY) " +
-                       "VALUES (?, ?, ?, ?, ?, ?);";
+        String query = "INSERT INTO devices (ID, DeviceType, State, RoomNr, LocX, LocY, Deployment) " +
+                       "VALUES (?, ?, ?, ?, ?, ?, ?);";
 
-        Object[] data = {
-            d.getDeviceID(),
-            d.getDeviceType() ? "1" : "0",
-            d.getState() ? "1" : "0",
-            d.getRoomNr(),
-            d.getLocX(),
-            d.getLocY()
+        ArrayList<Object> data = new ArrayList<>();
+        data.add(d.getDeviceID());
+        data.add(d.getDeviceType() ? "1" : "0");
+        data.add(d.getState() ? "1" : "0");
+        data.add(d.getRoomNr());
+        data.add(d.getLocX());
+        data.add(d.getLocY());
 
-        };
+        if (d instanceof DeviceLight) {
+            DeviceLight dl = (DeviceLight)d;
+
+            data.add(dl.getDeployment().getType());
+        } else {
+            data.add(null);
+        }
 
         try {
-            this.db.executeQuery(query, data);
+            this.db.executeQuery(query, data.toArray());
             return true;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -96,19 +101,31 @@ public class DeviceRepository {
      * @return The collection of existing device.
      */
     public ArrayList<Device> getAll() {
-        String query = "SELECT ID, DeviceType, State, RoomNr, LocX, LocY FROM devices";
+        String query = "SELECT ID, DeviceType, State, RoomNr, LocX, LocY, Deployment FROM devices";
         Object[] data = {};
 
         try {
             RowConversionFunction<Device> rowConversion = rs -> {
-                return Device.Make(
-                    rs.getInt("ID"),
-                    rs.getBoolean("DeviceType"),
-                    rs.getBoolean("State"),
-                    rs.getInt("RoomNr"),
-                    rs.getInt("LocX"),
-                    rs.getInt("LocY")
-                );
+                boolean type = rs.getBoolean("DeviceType");
+
+                if (type) {
+                    return DeviceLight.Make(
+                        rs.getInt("ID"),
+                        rs.getBoolean("State"),
+                        rs.getInt("RoomNr"),
+                        rs.getInt("LocX"),
+                        rs.getInt("LocY"),
+                        DeploymentType.Parse(rs.getInt("Deployment"))
+                    );
+                } else {
+                    return DeviceSensor.Make(
+                        rs.getInt("ID"),
+                        rs.getBoolean("State"),
+                        rs.getInt("RoomNr"),
+                        rs.getInt("LocX"),
+                        rs.getInt("LocY")
+                    );
+                }
             };
 
             return this.db.executeQuery(query, data, rowConversion);
@@ -132,6 +149,32 @@ public class DeviceRepository {
 
         Object[] data = {
                 newState,
+                id
+        };
+
+        try {
+            this.db.executeQuery(query, data);
+            return true;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
+     * Updates the deployment of a light device.
+     * @param id The device that is to be updated.
+     * @param deployment The new deployment type of the light device.
+     * @return True if the update succeeded, otherwise false.
+     */
+    public boolean updateDeployment(int id, DeploymentType deployment) {
+        String query = "UPDATE devices " +
+                "SET Deployment = ? " +
+                "WHERE ID = ? AND DeviceType = 1;";
+
+        Object[] data = {
+                deployment.getType(),
                 id
         };
 

@@ -102,7 +102,8 @@ var services = {
                         state: state,
                         roomNr: roomNr,
                         locX: locX,
-                        locY : locY
+                        locY : locY,
+                        deploymentType: 1
                     })
                 .then(function(data) {
                     return parseDevice(data);
@@ -137,6 +138,15 @@ var services = {
                     }
 
                     return result;
+                });
+        },
+
+        updateDeployment: function(deviceID, deployment) {
+            return api.post(
+                services.device.url + "/updateDeployment",
+                {
+                    deviceID: deviceID,
+                    deployment: deployment
                 });
         }
     },

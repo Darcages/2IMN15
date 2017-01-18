@@ -220,7 +220,8 @@ ALTER TABLE `room`
 -- Indexes for table `user2device`
 --
 ALTER TABLE `user2device`
-  ADD PRIMARY KEY (`UserID`,`DeviceID`);
+  ADD PRIMARY KEY (`UserID`,`DeviceID`),
+  ADD UNIQUE KEY `Prio_UNIQUE` (`DeviceID`, `PrioLevel`);
 
 --
 -- Indexes for table `useraccount`

@@ -44,23 +44,20 @@ public class User2DeviceService {
     }
 
     @POST
-    @Path("/create")
+    @Path("/set")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public JsonObject create(JsonObject user2device) {
+    public JsonObject set(JsonObject user2device) {
         try {
-            User2Device ua = JsonConverter.toUser2Device(user2device);
+            User2Device ud = JsonConverter.toUser2Device(user2device);
 
-            if (this.repos.exists(ua.getUserID(), ua.getDeviceID())) {
-                throw new IllegalArgumentException(
-                    String.format(
-                        "There already exists a binding between user account with ID '%1s' and device with ID '%1s'.",
-                        ua.getUserID(), ua.getDeviceID()));
+            if (this.repos.exists(ud.getUserID(), ud.getDeviceID())) {
+                this.repos.update(ud);
+            } else {
+                this.repos.create(ud);
             }
 
-            this.repos.create(ua);
-
-            return JsonConverter.Success(JsonConverter.toJson(ua));
+            return JsonConverter.Success(JsonConverter.toJson(ud));
         }
         catch (IllegalArgumentException | NoSuchFieldException | NoSuchElementException ex)
         {

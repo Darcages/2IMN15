@@ -1,12 +1,14 @@
 package iot.data.repository;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import iot.data.Database;
 import iot.data.RowConversionFunction;
-import iot.domain.Device2Desk;
 import iot.domain.User2Device;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class User2DeviceRepository {
@@ -38,12 +40,13 @@ public class User2DeviceRepository {
             d.getGreen(),
             d.getBlue(),
             d.getLowLight()
-
         };
 
         try {
             this.db.executeQuery(query, data);
             return true;
+        } catch (MySQLIntegrityConstraintViolationException ex) {
+            this.processUniqueKeyViolation(ex);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -58,14 +61,12 @@ public class User2DeviceRepository {
      * @return True if the deletion was successful. Otherwise false is returned.
      */
     public boolean delete(int userID, int deviceID) {
-
-
-        String query2 = "DELETE FROM user2device WHERE UserID = ? AND DeviceID = ?;";
-        Object[] data2 = { userID, deviceID };
+        String query = "DELETE FROM user2device WHERE UserID = ? AND DeviceID = ?;";
+        Object[] data = { userID, deviceID };
 
         try {
-            this.db.executeQuery(query2, data2);
-            return  true;
+            this.db.executeQuery(query, data);
+            return true;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -125,5 +126,68 @@ public class User2DeviceRepository {
         }
 
         return new ArrayList<>();
+    }
+
+    /**
+     * Updates the provided user2device.
+     * @param d The user2device that is to be updated.
+     * @return True if the update succeeded, otherwise false.
+     */
+    public boolean update(User2Device d) {
+        String query = "UPDATE user2device " +
+                "SET PrioLevel = ?, Red = ?, Green = ?, Blue = ?, LowLight = ? " +
+                "WHERE UserID = ? AND DeviceID = ?;";
+
+        Object[] data = {
+                d.getPrioLevel(),
+                d.getRed(),
+                d.getGreen(),
+                d.getBlue(),
+                d.getLowLight(),
+                d.getUserID(),
+                d.getDeviceID()
+        };
+
+        try {
+            this.db.executeQuery(query, data);
+            return true;
+        } catch (MySQLIntegrityConstraintViolationException ex) {
+            this.processUniqueKeyViolation(ex);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return false;
+    }
+
+    /**
+     * Processes the unique key violation thrown by the database.
+     * @param ex The exception that was thrown.
+     * @throws IllegalArgumentException An expected unique key violation happened. The corresponding message is build.
+     */
+    private void processUniqueKeyViolation(MySQLIntegrityConstraintViolationException ex) throws IllegalArgumentException {
+        Matcher matcher = Pattern
+            .compile("^Duplicate entry '(\\d{1,11})-(\\d{1,11})' for key '(.+)'$")
+            .matcher(ex.getMessage());
+
+        if (matcher.matches()) {
+            String key = matcher.group(3);
+
+            switch (key) {
+                case "Prio_UNIQUE":
+                    int deviceId = Integer.parseInt(matcher.group(1));
+                    int prio = Integer.parseInt(matcher.group(2));
+
+                    throw new IllegalArgumentException(String.format(
+                            "Another user is already assigned with priority '%s' to device '%s'.",
+                            prio,
+                            deviceId));
+                default:
+                    ex.printStackTrace();
+                    break;
+            }
+        } else {
+            ex.printStackTrace();
+        }
     }
 }

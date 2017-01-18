@@ -1,26 +1,38 @@
 var addU2DToOverview = function(d2d) {
+    var table = $('#users2devices-overview');
 
-    // Function called once a row is tried to be removed.
-    var remove = function(id, selectedRow) {
-        services.user2device
-            .delete(id.split("-")[0], id.split("-")[1])
-            .done(function() {
-                selectedRow.remove();
-            })
-            .fail(function(error) {
-                console.log("Error during removal of group '" + id + "'. Message: " + error);
+    var id = d2d.userID + "-" + d2d.deviceID;
+    var data = [d2d.userID, d2d.deviceID, d2d.prioLevel, d2d.red, d2d.green, d2d.blue, d2d.lowLight];
+
+    var row = table
+        .children('tr')
+        .filter(function(i) {
+           return $(this).data('id') === id;
+        });
+
+    if (row.length > 0) {
+        row
+            .children('td')
+            .each(function (i) {
+                if (0 <= i && i < data.length) {
+                    $(this).text(data[i]);
+                }
             });
+    } else {
+        // Function called once a row is tried to be removed.
+        var remove = function(id, selectedRow) {
+            services.user2device
+                .delete(id.split("-")[0], id.split("-")[1])
+                .done(function() {
+                    selectedRow.remove();
+                })
+                .fail(function(error) {
+                    console.log("Error during removal of group '" + id + "'. Message: " + error);
+                });
+        }
+
+        table.append(toTableRowRemovable(id, data, remove));
     }
-
-
-
-
-    var row = toTableRowRemovable(
-        d2d.userID + "-" + d2d.deviceID,
-        [d2d.userID, d2d.deviceID, d2d.prioLevel, d2d.red, d2d.green, d2d.blue, d2d.lowLight],
-        remove);
-
-    $('#users2devices-overview').append(row);
 }
 
 var loadOverview = function() {
@@ -37,9 +49,7 @@ var loadOverview = function() {
         });
 }
 
-
-
-var create = function() {
+var set = function() {
     var userid = document.getElementById('new-u2d-input-userid').value;
     if (!isInt(userid)) {
         setErrorMessage("The device group ID is not an integer.");
@@ -72,8 +82,6 @@ var create = function() {
         var prio = 3;
     }
 
-
-
     var red = document.getElementById('new-u2d-input-red').value;
     if (!isInt(red)) {
         setErrorMessage("Red is not an integer.");
@@ -105,10 +113,8 @@ var create = function() {
         var lowlight = false
     }
 
-
-
     services.user2device
-        .create(userid, deviceid, prio, red, green, blue, lowlight)
+        .set(userid, deviceid, prio, red, green, blue, lowlight)
         .done(function(u2d) {
             disableErrorMessage();
 
@@ -118,8 +124,6 @@ var create = function() {
             setErrorMessage(error);
         });
 }
-
-
 
 var fillUsers = function() {
     services.userAccount

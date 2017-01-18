@@ -277,14 +277,20 @@ var services = {
         url: "/services/User2DeviceService",
 
         /**
-         * Create a new desk.
-         * @param deskID The ID of the desk
+         * Creates (or updates if already exists) the link between an user and their device.
+         * @param userID The identifier of the user.
+         * @param deviceID The identifier of the device.
+         * @param prioLevel the priority of the user with the device.
+         * @param red The red color of the preferred lighting.
+         * @param green The green color of the preferred lighting.
+         * @param blue The blue color of the preferred lighting.
+         * @param lowLight Indication whether or not low light is preferred.
          * @returns {Promise} The promise that will give the result of this call.
          */
-        create: function(userID, deviceID, prioLevel, red, green, blue, lowLight) {
+        set: function(userID, deviceID, prioLevel, red, green, blue, lowLight) {
             return api
                 .post(
-                    services.user2device.url + "/create",
+                    services.user2device.url + "/set",
                     {
                         userID: userID,
                         deviceID: deviceID,

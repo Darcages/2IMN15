@@ -72,21 +72,22 @@ CREATE TABLE `devices` (
   `State` tinyint(1) NOT NULL,
   `RoomNr` int(11) NOT NULL,
   `LocX` int(11) NOT NULL,
-  `LocY` int(11) NOT NULL
+  `LocY` int(11) NOT NULL,
+  `Deployment` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `devices`
 --
 
-INSERT INTO `devices` (`ID`, `DeviceType`, `State`, `RoomNr`, `LocX`, `LocY`) VALUES
-(1, 1, 1, 3, 0, 0),
-(2, 1, 0, 2, 1, 1),
-(3, 1, 0, 123, 123, 123),
-(4, 1, 0, 4, 2, 3),
-(8, 0, 0, 6, 0, 0),
-(16, 0, 0, 2, 2, 2),
-(32, 1, 0, 5, 5, 5);
+INSERT INTO `devices` (`ID`, `DeviceType`, `State`, `RoomNr`, `LocX`, `LocY`, `Deployment`) VALUES
+(1, 1, 1, 3, 0, 0, 1),
+(2, 1, 0, 2, 1, 1, 2),
+(3, 1, 0, 123, 123, 123, 1),
+(4, 1, 0, 4, 2, 3, 0),
+(8, 0, 0, 6, 0, 0, NULL),
+(16, 0, 0, 2, 2, 2, NULL),
+(32, 1, 0, 5, 5, 5, 2);
 
 -- --------------------------------------------------------
 

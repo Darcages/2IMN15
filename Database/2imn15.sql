@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 15, 2017 at 05:42 PM
+-- Generation Time: Jan 18, 2017 at 11:08 PM
 -- Server version: 5.7.16-0ubuntu0.16.04.1
 -- PHP Version: 5.6.29-1+deb.sury.org~xenial+1
 
@@ -69,7 +69,7 @@ INSERT INTO `device2desk` (`DeskID`, `DeviceID`) VALUES
 CREATE TABLE `devices` (
   `ID` int(11) NOT NULL,
   `DeviceType` tinyint(1) NOT NULL,
-  `State` tinyint(1) NOT NULL,
+  `State` tinyint(4) NOT NULL,
   `RoomNr` int(11) NOT NULL,
   `LocX` int(11) NOT NULL,
   `LocY` int(11) NOT NULL,
@@ -82,7 +82,7 @@ CREATE TABLE `devices` (
 
 INSERT INTO `devices` (`ID`, `DeviceType`, `State`, `RoomNr`, `LocX`, `LocY`, `Deployment`) VALUES
 (1, 1, 1, 3, 0, 0, 1),
-(2, 1, 0, 2, 1, 1, 2),
+(2, 1, 2, 2, 1, 1, 2),
 (3, 1, 0, 123, 123, 123, 1),
 (4, 1, 0, 4, 2, 3, 0),
 (8, 0, 0, 6, 0, 0, NULL),
@@ -99,27 +99,43 @@ CREATE TABLE `events` (
   `timestamp` datetime NOT NULL,
   `deviceID` int(11) NOT NULL,
   `userID` int(11) NOT NULL,
-  `newState` tinyint(1) NOT NULL
+  `newState` tinyint(4) NOT NULL,
+  `userType` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `events`
 --
 
-INSERT INTO `events` (`timestamp`, `deviceID`, `userID`, `newState`) VALUES
-('2017-01-15 00:00:00', 8, 2, 1),
-('2017-01-15 07:17:17', 2, 2, 1),
-('2017-01-15 13:50:31', 1, 2, 0),
-('2017-01-15 14:20:17', 1, 2, 1),
-('2017-01-15 14:20:22', 1, 2, 0),
-('2017-01-15 14:20:26', 1, 2, 1),
-('2017-01-15 14:20:30', 1, 2, 0),
-('2017-01-15 14:20:34', 1, 2, 1),
-('2017-01-15 14:54:41', 1, 2, 0),
-('2017-01-15 14:54:51', 1, 2, 1),
-('2017-01-15 14:55:28', 2, 2, 0),
-('2017-01-15 16:09:26', 3, -1, 0),
-('2017-01-16 00:00:00', 8, 2, 0);
+INSERT INTO `events` (`timestamp`, `deviceID`, `userID`, `newState`, `userType`) VALUES
+('2017-01-15 00:00:00', 8, 2, 1, 0),
+('2017-01-15 07:17:17', 2, 2, 1, 0),
+('2017-01-15 13:50:31', 1, 2, 0, 0),
+('2017-01-15 14:20:17', 1, 2, 1, 0),
+('2017-01-15 14:20:22', 1, 2, 0, 0),
+('2017-01-15 14:20:26', 1, 2, 1, 0),
+('2017-01-15 14:20:30', 1, 2, 0, 0),
+('2017-01-15 14:20:34', 1, 2, 1, 0),
+('2017-01-15 14:54:41', 1, 2, 0, 0),
+('2017-01-15 14:54:51', 1, 2, 1, 0),
+('2017-01-15 14:55:28', 2, 2, 0, 0),
+('2017-01-15 16:09:26', 3, -1, 0, 0),
+('2017-01-16 00:00:00', 8, 2, 0, 0),
+('2017-01-18 21:05:35', 2, 2, 1, 2),
+('2017-01-18 21:06:53', 2, 2, 0, 2),
+('2017-01-18 21:09:14', 2, 2, 1, 1),
+('2017-01-18 21:12:14', 2, 2, 0, 1),
+('2017-01-18 21:12:44', 2, 2, 1, 1),
+('2017-01-18 21:14:00', 2, 2, 0, 1),
+('2017-01-18 21:14:15', 2, 2, 1, 3),
+('2017-01-18 21:15:00', 2, 2, 0, 3),
+('2017-01-18 21:15:11', 2, 2, 1, 1),
+('2017-01-18 21:15:55', 2, 2, 0, 1),
+('2017-01-18 21:16:47', 2, 2, 1, 2),
+('2017-01-18 22:26:45', 2, 2, 2, 2),
+('2017-01-18 22:27:22', 2, 2, 0, 2),
+('2017-01-18 22:28:14', 2, 2, 2, 2),
+('2017-01-19 22:28:25', 2, 2, 0, 2);
 
 -- --------------------------------------------------------
 
@@ -222,7 +238,7 @@ ALTER TABLE `room`
 --
 ALTER TABLE `user2device`
   ADD PRIMARY KEY (`UserID`,`DeviceID`),
-  ADD UNIQUE KEY `Prio_UNIQUE` (`DeviceID`, `PrioLevel`);
+  ADD UNIQUE KEY `Prio_UNIQUE` (`DeviceID`,`PrioLevel`);
 
 --
 -- Indexes for table `useraccount`

@@ -21,7 +21,7 @@ var fillBarGraph = function() {
                     for (var i = 0; i < events.length; i++) {
                         for(var j = 0; j < devices.length; j++){
                             if(events[i].deviceID == devices[j].deviceID){
-                                if(events[i].newState == true){
+                                if(events[i].newState == 1 || events[i].newState == 2){
                                     if(sumTime[events[i].deviceID] == undefined) sumTime[events[i].deviceID] = 0;
                                     lastOnTime[events[i].deviceID] = events[i].timestamp;
                                     console.log("Set on: " + events[i].deviceID + " at " + events[i].timestamp);

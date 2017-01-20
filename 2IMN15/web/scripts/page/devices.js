@@ -45,7 +45,7 @@ var create = function() {
 
 
 
-    var deviceState = false;
+    var deviceState = 0;
 
     if (!isInt(deviceID)) {
         setErrorMessage("The device id is not an integer.");
@@ -94,7 +94,7 @@ var create = function() {
         });
 
     services.event
-        .create(deviceID, -1, false)
+        .create(deviceID, -1, 0, 0)
         .fail(function(error) {
             setErrorMessage(error);
         });

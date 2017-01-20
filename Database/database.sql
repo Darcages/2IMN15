@@ -3,8 +3,8 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jan 18, 2017 at 11:08 PM
--- Server version: 5.7.16-0ubuntu0.16.04.1
+-- Generation Time: Jan 20, 2017 at 08:46 PM
+-- Server version: 5.7.17-0ubuntu0.16.04.1
 -- PHP Version: 5.6.29-1+deb.sury.org~xenial+1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -19,6 +19,11 @@ SET time_zone = "+00:00";
 --
 -- Database: `2imn15`
 --
+CREATE DATABASE IF NOT EXISTS `2imn15` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `2imn15`;
+
+
+CREATE USER 'iot'@'localhost' IDENTIFIED BY 'p8LqySJhb49ovpPf5Cq5';
 
 -- --------------------------------------------------------
 
@@ -38,7 +43,7 @@ CREATE TABLE `desks` (
 --
 
 INSERT INTO `desks` (`ID`, `UserID`, `LocX`, `LocY`) VALUES
-(21, 4, 2, 2);
+(1, 23, 3, 3);
 
 -- --------------------------------------------------------
 
@@ -56,9 +61,8 @@ CREATE TABLE `device2desk` (
 --
 
 INSERT INTO `device2desk` (`DeskID`, `DeviceID`) VALUES
-(21, 1),
-(21, 2),
-(21, 8);
+(1, 1),
+(1, 3);
 
 -- --------------------------------------------------------
 
@@ -69,11 +73,11 @@ INSERT INTO `device2desk` (`DeskID`, `DeviceID`) VALUES
 CREATE TABLE `devices` (
   `ID` int(11) NOT NULL,
   `DeviceType` tinyint(1) NOT NULL,
-  `State` tinyint(4) NOT NULL,
+  `State` tinyint(1) NOT NULL,
   `RoomNr` int(11) NOT NULL,
   `LocX` int(11) NOT NULL,
   `LocY` int(11) NOT NULL,
-  `Deployment` int(11) DEFAULT NULL
+  `Deployment` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -81,13 +85,9 @@ CREATE TABLE `devices` (
 --
 
 INSERT INTO `devices` (`ID`, `DeviceType`, `State`, `RoomNr`, `LocX`, `LocY`, `Deployment`) VALUES
-(1, 1, 1, 3, 0, 0, 1),
-(2, 1, 2, 2, 1, 1, 2),
-(3, 1, 0, 123, 123, 123, 1),
-(4, 1, 0, 4, 2, 3, 0),
-(8, 0, 0, 6, 0, 0, NULL),
-(16, 0, 0, 2, 2, 2, NULL),
-(32, 1, 0, 5, 5, 5, 2);
+(1, 1, 0, 3, 1, 5, 1),
+(2, 1, 0, 3, 4, 5, 1),
+(3, 0, 0, 3, 5, 5, NULL);
 
 -- --------------------------------------------------------
 
@@ -99,8 +99,8 @@ CREATE TABLE `events` (
   `timestamp` datetime NOT NULL,
   `deviceID` int(11) NOT NULL,
   `userID` int(11) NOT NULL,
-  `newState` tinyint(4) NOT NULL,
-  `userType` tinyint(4) NOT NULL
+  `newState` tinyint(1) NOT NULL,
+  `userType` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -108,34 +108,18 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`timestamp`, `deviceID`, `userID`, `newState`, `userType`) VALUES
-('2017-01-15 00:00:00', 8, 2, 1, 0),
-('2017-01-15 07:17:17', 2, 2, 1, 0),
-('2017-01-15 13:50:31', 1, 2, 0, 0),
-('2017-01-15 14:20:17', 1, 2, 1, 0),
-('2017-01-15 14:20:22', 1, 2, 0, 0),
-('2017-01-15 14:20:26', 1, 2, 1, 0),
-('2017-01-15 14:20:30', 1, 2, 0, 0),
-('2017-01-15 14:20:34', 1, 2, 1, 0),
-('2017-01-15 14:54:41', 1, 2, 0, 0),
-('2017-01-15 14:54:51', 1, 2, 1, 0),
-('2017-01-15 14:55:28', 2, 2, 0, 0),
-('2017-01-15 16:09:26', 3, -1, 0, 0),
-('2017-01-16 00:00:00', 8, 2, 0, 0),
-('2017-01-18 21:05:35', 2, 2, 1, 2),
-('2017-01-18 21:06:53', 2, 2, 0, 2),
-('2017-01-18 21:09:14', 2, 2, 1, 1),
-('2017-01-18 21:12:14', 2, 2, 0, 1),
-('2017-01-18 21:12:44', 2, 2, 1, 1),
-('2017-01-18 21:14:00', 2, 2, 0, 1),
-('2017-01-18 21:14:15', 2, 2, 1, 3),
-('2017-01-18 21:15:00', 2, 2, 0, 3),
-('2017-01-18 21:15:11', 2, 2, 1, 1),
-('2017-01-18 21:15:55', 2, 2, 0, 1),
-('2017-01-18 21:16:47', 2, 2, 1, 2),
-('2017-01-18 22:26:45', 2, 2, 2, 2),
-('2017-01-18 22:27:22', 2, 2, 0, 2),
-('2017-01-18 22:28:14', 2, 2, 2, 2),
-('2017-01-19 22:28:25', 2, 2, 0, 2);
+('2017-01-20 20:38:40', 1, -1, 0, 0),
+('2017-01-20 20:39:07', 2, -1, 0, 0),
+('2017-01-20 20:39:08', 2, 23, 1, 1),
+('2017-01-20 20:39:14', 3, -1, 0, 0),
+('2017-01-20 20:39:15', 3, 23, 1, 1),
+('2017-01-20 20:48:40', 1, 23, 1, 1),
+('2017-01-20 20:58:40', 1, 23, 0, 1),
+('2017-01-20 20:59:15', 3, 23, 0, 1),
+('2017-01-20 21:58:40', 1, 23, 1, 2),
+('2017-01-20 21:59:15', 3, 23, 1, 1),
+('2017-01-20 22:39:08', 2, 23, 0, 1),
+('2017-01-20 22:58:40', 1, 23, 0, 2);
 
 -- --------------------------------------------------------
 
@@ -158,10 +142,10 @@ CREATE TABLE `room` (
 CREATE TABLE `user2device` (
   `UserID` int(11) NOT NULL,
   `DeviceID` int(11) NOT NULL,
-  `PrioLevel` int(11) NOT NULL,
-  `Red` int(11) NOT NULL,
-  `Green` int(11) NOT NULL,
-  `Blue` int(11) NOT NULL,
+  `PrioLevel` tinyint(1) NOT NULL,
+  `Red` smallint(3) NOT NULL,
+  `Green` smallint(3) NOT NULL,
+  `Blue` smallint(3) NOT NULL,
   `LowLight` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -170,9 +154,7 @@ CREATE TABLE `user2device` (
 --
 
 INSERT INTO `user2device` (`UserID`, `DeviceID`, `PrioLevel`, `Red`, `Green`, `Blue`, `LowLight`) VALUES
-(2, 1, 1, 255, 255, 255, 0),
-(2, 2, 2, 2, 2, 2, 1),
-(2, 4, 2, 2, 2, 2, 1);
+(23, 1, 1, 200, 100, 30, 1);
 
 -- --------------------------------------------------------
 
@@ -195,8 +177,7 @@ CREATE TABLE `useraccount` (
 --
 
 INSERT INTO `useraccount` (`GroupNr`, `RoomNr`, `FirstName`, `Prefix`, `LastName`, `Email`, `Password`) VALUES
-(2, 4, 'asdf', '', 'asdf', 'asdf@asdf.com', 'asdf'),
-(3, 2, 'Henk', '', 'Klaas', 'henk@kllaas.nl', 'hallo');
+(23, 2, 'Foo', '', 'Bar', 'foo@bar.com', 'pwd-23');
 
 --
 -- Indexes for dumped tables
@@ -238,7 +219,7 @@ ALTER TABLE `room`
 --
 ALTER TABLE `user2device`
   ADD PRIMARY KEY (`UserID`,`DeviceID`),
-  ADD UNIQUE KEY `Prio_UNIQUE` (`DeviceID`,`PrioLevel`);
+  ADD UNIQUE KEY `UserID` (`UserID`,`DeviceID`);
 
 --
 -- Indexes for table `useraccount`
@@ -255,12 +236,12 @@ ALTER TABLE `useraccount`
 -- AUTO_INCREMENT for table `desks`
 --
 ALTER TABLE `desks`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `devices`
 --
 ALTER TABLE `devices`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

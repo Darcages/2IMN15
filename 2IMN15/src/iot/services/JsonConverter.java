@@ -433,7 +433,8 @@ public class JsonConverter {
         }
         if (obj.get(name).getValueType() != JsonValue.ValueType.NUMBER) {
             throw new NoSuchFieldException(
-                String.format("The field '%1s' is not a number.", name));
+
+                String.format("The field '%1s' is not a number." + obj.toString(), name));
         }
         if (!obj.getJsonNumber(name).isIntegral())
         {
@@ -501,17 +502,7 @@ public class JsonConverter {
             throw new NoSuchFieldException(
                     String.format("The field '%1s' is missing.", name));
         }
-        /*
-        if (obj.get(name).getValueType() != JsonValue.ValueType.NUMBER) {
-            throw new NoSuchFieldException(
-                    String.format("The field '%1s' is not a boolean.", obj.getJsonString(name)));
-        }
-        if (!obj.getJsonNumber(name).isIntegral())
-        {
-            throw new NoSuchFieldException(
-                    String.format("The field '%1s' is not an integer.", name));
-        }
-*/
+
 
 
         return obj.getBoolean(name);

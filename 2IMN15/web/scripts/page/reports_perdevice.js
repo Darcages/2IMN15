@@ -82,7 +82,7 @@ var filluserTypeChart = function(deviceID) {
 
                 for (var i = 0; i < events.length; i++) {
                     if (events[i].deviceID == deviceID) {
-                        if (events[i].newState == true) {
+                        if (events[i].newState == 1 || events[i].newState == 2) {
                             lastUser = events[i].userType;
                             lastTime = events[i].timestamp;
                         }
